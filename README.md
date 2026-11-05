@@ -1,7 +1,7 @@
 # Documentación del proyecto Secure SDLC aplicado a FORJA
 
 Proyecto del curso Seguridad de Sistemas Informáticos, Universidad del Valle de Guatemala (Campus Sur).
-Catedrático: Ing. Chaly Monroy.
+Catedrático: Ing. Rolando Iván Chalí Monroy.
 
 ## Integrantes
 - José Julián Amado García
