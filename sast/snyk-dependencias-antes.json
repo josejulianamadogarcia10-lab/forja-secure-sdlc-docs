@@ -1,0 +1,3157 @@
+[
+  {
+    "vulnerabilities": [
+      {
+        "id": "SNYK-PHP-LEAGUECOMMONMARK-20875273",
+        "title": "Cross-site Scripting (XSS)",
+        "CVSSv3": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:L/I:L/A:N/E:P",
+        "credit": [
+          "4n86rakam1"
+        ],
+        "semver": {
+          "vulnerable": [
+            ">=1.3.0, <2.10.2"
+          ]
+        },
+        "exploit": "Proof of Concept",
+        "fixedIn": [
+          "2.10.2"
+        ],
+        "patches": [],
+        "insights": {
+          "triageAdvice": null
+        },
+        "language": "php",
+        "severity": "medium",
+        "cvssScore": 5.1,
+        "functions": [],
+        "malicious": false,
+        "isDisputed": false,
+        "moduleName": "league/commonmark",
+        "references": [
+          {
+            "url": "https://github.com/thephpleague/commonmark/security/advisories/GHSA-97jj-33gv-5xf9",
+            "title": "GitHub Advisory"
+          },
+          {
+            "url": "https://github.com/thephpleague/commonmark/commit/411afcc2a7402756d96c89af8882c724d12d47ca",
+            "title": "GitHub Commit"
+          },
+          {
+            "url": "https://github.com/thephpleague/commonmark/releases/tag/2.10.2",
+            "title": "GitHub Release"
+          }
+        ],
+        "cvssDetails": [
+          {
+            "assigner": "NVD",
+            "severity": "medium",
+            "cvssV3Vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:L/I:L/A:N",
+            "cvssV3BaseScore": 6.1,
+            "modificationTime": "2026-10-09T01:31:28.308554Z"
+          }
+        ],
+        "cvssSources": [
+          {
+            "type": "primary",
+            "vector": "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:A/VC:N/VI:L/VA:N/SC:L/SI:L/SA:N/E:P",
+            "assigner": "Snyk",
+            "severity": "medium",
+            "baseScore": 5.1,
+            "cvssVersion": "4.0",
+            "modificationTime": "2026-10-25T14:06:56.493805Z"
+          },
+          {
+            "type": "secondary",
+            "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:L/I:L/A:N/E:P",
+            "assigner": "Snyk",
+            "severity": "medium",
+            "baseScore": 6.1,
+            "cvssVersion": "3.1",
+            "modificationTime": "2026-10-25T14:06:56.493805Z"
+          },
+          {
+            "type": "secondary",
+            "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:L/I:L/A:N",
+            "assigner": "NVD",
+            "severity": "medium",
+            "baseScore": 6.1,
+            "cvssVersion": "3.1",
+            "modificationTime": "2026-10-09T01:31:28.308554Z"
+          }
+        ],
+        "description": "## Overview\n[league/commonmark](https://packagist.org/packages/league/commonmark) is a PHP-based Markdown parser which supports the full CommonMark spec. It is based on the CommonMark JS reference implementation.\n\nAffected versions of this package are vulnerable to Cross-site Scripting (XSS) in the `DisallowedRawHtml` process when a disallowed tag name appears at the end of a raw HTML literal. An attacker can inject and execute arbitrary scripts in the context of the user's browser by submitting specially crafted Markdown content that exploits the improper escaping of disallowed HTML tags. \n\n**Note:** This is only exploitable if the `html_input` setting is set to `allow`, the `DisallowedRawHtml` extension is active, and untrusted users are permitted to post Markdown.\n\n## Workaround\n\nUsers that are not able to upgrade to the fixed version are advised to set `html_input` to `escape` or `strip`.\n## Details\n\nCross-site scripting (or XSS) is a code vulnerability that occurs when an attacker “injects” a malicious script into an otherwise trusted website. The injected script gets downloaded and executed by the end user’s browser when the user interacts with the compromised website.\n\nThis is done by escaping the context of the web application; the web application then delivers that data to its users along with other trusted dynamic content, without validating it. The browser unknowingly executes malicious script on the client side (through client-side languages; usually JavaScript or HTML)  in order to perform actions that are otherwise typically blocked by the browser’s Same Origin Policy.\n\nInjecting malicious code is the most prevalent manner by which XSS is exploited; for this reason, escaping characters in order to prevent this manipulation is the top method for securing code against this vulnerability.\n\nEscaping means that the application is coded to mark key characters, and particularly key characters included in user input, to prevent those characters from being interpreted in a dangerous context. For example, in HTML, `<` can be coded as  `&lt`; and `>` can be coded as `&gt`; in order to be interpreted and displayed as themselves in text, while within the code itself, they are used for HTML tags. If malicious content is injected into an application that escapes special characters and that malicious content uses `<` and `>` as HTML tags, those characters are nonetheless not interpreted as HTML tags by the browser if they’ve been correctly escaped in the application code and in this way the attempted attack is diverted.\n \nThe most prominent use of XSS is to steal cookies (source: OWASP HttpOnly) and hijack user sessions, but XSS exploits have been used to expose sensitive information, enable access to privileged services and functionality and deliver malware. \n\n### Types of attacks\nThere are a few methods by which XSS can be manipulated:\n\n|Type|Origin|Description|\n|--|--|--|\n|**Stored**|Server|The malicious code is inserted in the application (usually as a link) by the attacker. The code is activated every time a user clicks the link.|\n|**Reflected**|Server|The attacker delivers a malicious link externally from the vulnerable web site application to a user. When clicked, malicious code is sent to the vulnerable web site, which reflects the attack back to the user’s browser.| \n|**DOM-based**|Client|The attacker forces the user’s browser to render a malicious page. The data in the page itself delivers the cross-site scripting data.|\n|**Mutated**| |The attacker injects code that appears safe, but is then rewritten and modified by the browser, while parsing the markup. An example is rebalancing unclosed quotation marks or even adding quotation marks to unquoted parameters.|\n\n### Affected environments\nThe following environments are susceptible to an XSS attack:\n\n* Web servers\n* Application servers\n* Web application environments\n\n### How to prevent\nThis section describes the top best practices designed to specifically protect your code: \n\n* Sanitize data input in an HTTP request before reflecting it back, ensuring all data is validated, filtered or escaped before echoing anything back to the user, such as the values of query parameters during searches. \n* Convert special characters such as `?`, `&`, `/`, `<`, `>` and spaces to their respective HTML or URL encoded equivalents. \n* Give users the option to disable client-side scripts.\n* Redirect invalid requests.\n* Detect simultaneous logins, including those from two separate IP addresses, and invalidate those sessions.\n* Use and enforce a Content Security Policy (source: Wikipedia) to disable any features that might be manipulated for an XSS attack.\n* Read the documentation for any of the libraries referenced in your code to understand which elements allow for embedded HTML.\n\n## Remediation\nUpgrade `league/commonmark` to version 2.10.2 or higher.\n## References\n- [GitHub Advisory](https://github.com/thephpleague/commonmark/security/advisories/GHSA-97jj-33gv-5xf9)\n- [GitHub Commit](https://github.com/thephpleague/commonmark/commit/411afcc2a7402756d96c89af8882c724d12d47ca)\n- [GitHub Release](https://github.com/thephpleague/commonmark/releases/tag/2.10.2)\n",
+        "epssDetails": {
+          "percentile": "0.16167",
+          "probability": "0.00250",
+          "modelVersion": "v2026.06.15"
+        },
+        "identifiers": {
+          "CVE": [
+            "CVE-2026-105829"
+          ],
+          "CWE": [
+            "CWE-78",
+            "CWE-79"
+          ],
+          "GHSA": [
+            "GHSA-97jj-33gv-5xf9"
+          ]
+        },
+        "packageName": "league/commonmark",
+        "proprietary": false,
+        "creationTime": "2026-10-13T10:41:26.342056Z",
+        "functions_new": [],
+        "alternativeIds": [],
+        "disclosureTime": "2026-09-30T15:36:33Z",
+        "exploitDetails": {
+          "sources": [
+            "Snyk"
+          ],
+          "maturityLevels": [
+            {
+              "type": "secondary",
+              "level": "Proof of Concept",
+              "format": "CVSSv3"
+            },
+            {
+              "type": "primary",
+              "level": "Proof of Concept",
+              "format": "CVSSv4"
+            }
+          ]
+        },
+        "packageManager": "composer",
+        "publicationTime": "2026-10-13T10:41:26.515291Z",
+        "severityBasedOn": "CVSS",
+        "modificationTime": "2026-10-25T14:06:56.493805Z",
+        "socialTrendAlert": false,
+        "severityWithCritical": "medium",
+        "from": [
+          "laravel/react-starter-kit@0.0.0",
+          "laravel/framework@13.31.0",
+          "league/commonmark@2.10.1"
+        ],
+        "upgradePath": [],
+        "isUpgradable": false,
+        "isPatchable": false,
+        "name": "league/commonmark",
+        "version": "2.10.1"
+      },
+      {
+        "id": "SNYK-PHP-LEAGUECOMMONMARK-20875274",
+        "title": "Inefficient Algorithmic Complexity",
+        "CVSSv3": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H/E:P",
+        "credit": [
+          "manus-pi"
+        ],
+        "semver": {
+          "vulnerable": [
+            ">=2.0.0, <2.10.2"
+          ]
+        },
+        "exploit": "Proof of Concept",
+        "fixedIn": [
+          "2.10.2"
+        ],
+        "patches": [],
+        "insights": {
+          "triageAdvice": null
+        },
+        "language": "php",
+        "severity": "high",
+        "cvssScore": 8.7,
+        "functions": [],
+        "malicious": false,
+        "isDisputed": false,
+        "moduleName": "league/commonmark",
+        "references": [
+          {
+            "url": "https://github.com/thephpleague/commonmark/security/advisories/GHSA-3q6v-r5mr-hxv8",
+            "title": "GitHub Advisory"
+          },
+          {
+            "url": "https://github.com/thephpleague/commonmark/commit/5f63680a5e29dd57f9c6be9743b0e90493d3c2d0",
+            "title": "GitHub Commit"
+          }
+        ],
+        "cvssDetails": [
+          {
+            "assigner": "NVD",
+            "severity": "high",
+            "cvssV3Vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+            "cvssV3BaseScore": 7.5,
+            "modificationTime": "2026-10-09T01:31:24.648476Z"
+          }
+        ],
+        "cvssSources": [
+          {
+            "type": "primary",
+            "vector": "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:N/VI:N/VA:H/SC:N/SI:N/SA:N/E:P",
+            "assigner": "Snyk",
+            "severity": "high",
+            "baseScore": 8.7,
+            "cvssVersion": "4.0",
+            "modificationTime": "2026-10-25T14:06:57.067918Z"
+          },
+          {
+            "type": "secondary",
+            "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H/E:P",
+            "assigner": "Snyk",
+            "severity": "high",
+            "baseScore": 7.5,
+            "cvssVersion": "3.1",
+            "modificationTime": "2026-10-25T14:06:57.067918Z"
+          },
+          {
+            "type": "secondary",
+            "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+            "assigner": "NVD",
+            "severity": "high",
+            "baseScore": 7.5,
+            "cvssVersion": "3.1",
+            "modificationTime": "2026-10-09T01:31:24.648476Z"
+          }
+        ],
+        "description": "## Overview\n[league/commonmark](https://packagist.org/packages/league/commonmark) is a PHP-based Markdown parser which supports the full CommonMark spec. It is based on the CommonMark JS reference implementation.\n\nAffected versions of this package are vulnerable to Inefficient Algorithmic Complexity in the `TableStartParser::tryStart` function. An attacker can exhaust CPU resources and disrupt service availability by submitting a large paragraph of pipe-free, blank-line-free lines that do not begin with a letter to any service that processes untrusted Markdown with the relevant converter or configuration.\n## Remediation\nUpgrade `league/commonmark` to version 2.10.2 or higher.\n## References\n- [GitHub Advisory](https://github.com/thephpleague/commonmark/security/advisories/GHSA-3q6v-r5mr-hxv8)\n- [GitHub Commit](https://github.com/thephpleague/commonmark/commit/5f63680a5e29dd57f9c6be9743b0e90493d3c2d0)\n",
+        "epssDetails": {
+          "percentile": "0.30373",
+          "probability": "0.00368",
+          "modelVersion": "v2026.06.15"
+        },
+        "identifiers": {
+          "CVE": [
+            "CVE-2026-105830"
+          ],
+          "CWE": [
+            "CWE-400",
+            "CWE-407"
+          ],
+          "GHSA": [
+            "GHSA-3q6v-r5mr-hxv8"
+          ]
+        },
+        "packageName": "league/commonmark",
+        "proprietary": false,
+        "creationTime": "2026-10-13T10:43:12.598736Z",
+        "functions_new": [],
+        "alternativeIds": [],
+        "disclosureTime": "2026-09-30T15:36:13Z",
+        "exploitDetails": {
+          "sources": [
+            "Snyk"
+          ],
+          "maturityLevels": [
+            {
+              "type": "secondary",
+              "level": "Proof of Concept",
+              "format": "CVSSv3"
+            },
+            {
+              "type": "primary",
+              "level": "Proof of Concept",
+              "format": "CVSSv4"
+            }
+          ]
+        },
+        "packageManager": "composer",
+        "publicationTime": "2026-10-13T10:43:12.762699Z",
+        "severityBasedOn": "CVSS",
+        "modificationTime": "2026-10-25T14:06:57.067918Z",
+        "socialTrendAlert": false,
+        "severityWithCritical": "high",
+        "from": [
+          "laravel/react-starter-kit@0.0.0",
+          "laravel/framework@13.31.0",
+          "league/commonmark@2.10.1"
+        ],
+        "upgradePath": [],
+        "isUpgradable": false,
+        "isPatchable": false,
+        "name": "league/commonmark",
+        "version": "2.10.1"
+      },
+      {
+        "id": "SNYK-PHP-LEAGUECOMMONMARK-20875273",
+        "title": "Cross-site Scripting (XSS)",
+        "CVSSv3": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:L/I:L/A:N/E:P",
+        "credit": [
+          "4n86rakam1"
+        ],
+        "semver": {
+          "vulnerable": [
+            ">=1.3.0, <2.10.2"
+          ]
+        },
+        "exploit": "Proof of Concept",
+        "fixedIn": [
+          "2.10.2"
+        ],
+        "patches": [],
+        "insights": {
+          "triageAdvice": null
+        },
+        "language": "php",
+        "severity": "medium",
+        "cvssScore": 5.1,
+        "functions": [],
+        "malicious": false,
+        "isDisputed": false,
+        "moduleName": "league/commonmark",
+        "references": [
+          {
+            "url": "https://github.com/thephpleague/commonmark/security/advisories/GHSA-97jj-33gv-5xf9",
+            "title": "GitHub Advisory"
+          },
+          {
+            "url": "https://github.com/thephpleague/commonmark/commit/411afcc2a7402756d96c89af8882c724d12d47ca",
+            "title": "GitHub Commit"
+          },
+          {
+            "url": "https://github.com/thephpleague/commonmark/releases/tag/2.10.2",
+            "title": "GitHub Release"
+          }
+        ],
+        "cvssDetails": [
+          {
+            "assigner": "NVD",
+            "severity": "medium",
+            "cvssV3Vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:L/I:L/A:N",
+            "cvssV3BaseScore": 6.1,
+            "modificationTime": "2026-10-09T01:31:28.308554Z"
+          }
+        ],
+        "cvssSources": [
+          {
+            "type": "primary",
+            "vector": "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:A/VC:N/VI:L/VA:N/SC:L/SI:L/SA:N/E:P",
+            "assigner": "Snyk",
+            "severity": "medium",
+            "baseScore": 5.1,
+            "cvssVersion": "4.0",
+            "modificationTime": "2026-10-25T14:06:56.493805Z"
+          },
+          {
+            "type": "secondary",
+            "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:L/I:L/A:N/E:P",
+            "assigner": "Snyk",
+            "severity": "medium",
+            "baseScore": 6.1,
+            "cvssVersion": "3.1",
+            "modificationTime": "2026-10-25T14:06:56.493805Z"
+          },
+          {
+            "type": "secondary",
+            "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:L/I:L/A:N",
+            "assigner": "NVD",
+            "severity": "medium",
+            "baseScore": 6.1,
+            "cvssVersion": "3.1",
+            "modificationTime": "2026-10-09T01:31:28.308554Z"
+          }
+        ],
+        "description": "## Overview\n[league/commonmark](https://packagist.org/packages/league/commonmark) is a PHP-based Markdown parser which supports the full CommonMark spec. It is based on the CommonMark JS reference implementation.\n\nAffected versions of this package are vulnerable to Cross-site Scripting (XSS) in the `DisallowedRawHtml` process when a disallowed tag name appears at the end of a raw HTML literal. An attacker can inject and execute arbitrary scripts in the context of the user's browser by submitting specially crafted Markdown content that exploits the improper escaping of disallowed HTML tags. \n\n**Note:** This is only exploitable if the `html_input` setting is set to `allow`, the `DisallowedRawHtml` extension is active, and untrusted users are permitted to post Markdown.\n\n## Workaround\n\nUsers that are not able to upgrade to the fixed version are advised to set `html_input` to `escape` or `strip`.\n## Details\n\nCross-site scripting (or XSS) is a code vulnerability that occurs when an attacker “injects” a malicious script into an otherwise trusted website. The injected script gets downloaded and executed by the end user’s browser when the user interacts with the compromised website.\n\nThis is done by escaping the context of the web application; the web application then delivers that data to its users along with other trusted dynamic content, without validating it. The browser unknowingly executes malicious script on the client side (through client-side languages; usually JavaScript or HTML)  in order to perform actions that are otherwise typically blocked by the browser’s Same Origin Policy.\n\nInjecting malicious code is the most prevalent manner by which XSS is exploited; for this reason, escaping characters in order to prevent this manipulation is the top method for securing code against this vulnerability.\n\nEscaping means that the application is coded to mark key characters, and particularly key characters included in user input, to prevent those characters from being interpreted in a dangerous context. For example, in HTML, `<` can be coded as  `&lt`; and `>` can be coded as `&gt`; in order to be interpreted and displayed as themselves in text, while within the code itself, they are used for HTML tags. If malicious content is injected into an application that escapes special characters and that malicious content uses `<` and `>` as HTML tags, those characters are nonetheless not interpreted as HTML tags by the browser if they’ve been correctly escaped in the application code and in this way the attempted attack is diverted.\n \nThe most prominent use of XSS is to steal cookies (source: OWASP HttpOnly) and hijack user sessions, but XSS exploits have been used to expose sensitive information, enable access to privileged services and functionality and deliver malware. \n\n### Types of attacks\nThere are a few methods by which XSS can be manipulated:\n\n|Type|Origin|Description|\n|--|--|--|\n|**Stored**|Server|The malicious code is inserted in the application (usually as a link) by the attacker. The code is activated every time a user clicks the link.|\n|**Reflected**|Server|The attacker delivers a malicious link externally from the vulnerable web site application to a user. When clicked, malicious code is sent to the vulnerable web site, which reflects the attack back to the user’s browser.| \n|**DOM-based**|Client|The attacker forces the user’s browser to render a malicious page. The data in the page itself delivers the cross-site scripting data.|\n|**Mutated**| |The attacker injects code that appears safe, but is then rewritten and modified by the browser, while parsing the markup. An example is rebalancing unclosed quotation marks or even adding quotation marks to unquoted parameters.|\n\n### Affected environments\nThe following environments are susceptible to an XSS attack:\n\n* Web servers\n* Application servers\n* Web application environments\n\n### How to prevent\nThis section describes the top best practices designed to specifically protect your code: \n\n* Sanitize data input in an HTTP request before reflecting it back, ensuring all data is validated, filtered or escaped before echoing anything back to the user, such as the values of query parameters during searches. \n* Convert special characters such as `?`, `&`, `/`, `<`, `>` and spaces to their respective HTML or URL encoded equivalents. \n* Give users the option to disable client-side scripts.\n* Redirect invalid requests.\n* Detect simultaneous logins, including those from two separate IP addresses, and invalidate those sessions.\n* Use and enforce a Content Security Policy (source: Wikipedia) to disable any features that might be manipulated for an XSS attack.\n* Read the documentation for any of the libraries referenced in your code to understand which elements allow for embedded HTML.\n\n## Remediation\nUpgrade `league/commonmark` to version 2.10.2 or higher.\n## References\n- [GitHub Advisory](https://github.com/thephpleague/commonmark/security/advisories/GHSA-97jj-33gv-5xf9)\n- [GitHub Commit](https://github.com/thephpleague/commonmark/commit/411afcc2a7402756d96c89af8882c724d12d47ca)\n- [GitHub Release](https://github.com/thephpleague/commonmark/releases/tag/2.10.2)\n",
+        "epssDetails": {
+          "percentile": "0.16167",
+          "probability": "0.00250",
+          "modelVersion": "v2026.06.15"
+        },
+        "identifiers": {
+          "CVE": [
+            "CVE-2026-105829"
+          ],
+          "CWE": [
+            "CWE-78",
+            "CWE-79"
+          ],
+          "GHSA": [
+            "GHSA-97jj-33gv-5xf9"
+          ]
+        },
+        "packageName": "league/commonmark",
+        "proprietary": false,
+        "creationTime": "2026-10-13T10:41:26.342056Z",
+        "functions_new": [],
+        "alternativeIds": [],
+        "disclosureTime": "2026-09-30T15:36:33Z",
+        "exploitDetails": {
+          "sources": [
+            "Snyk"
+          ],
+          "maturityLevels": [
+            {
+              "type": "secondary",
+              "level": "Proof of Concept",
+              "format": "CVSSv3"
+            },
+            {
+              "type": "primary",
+              "level": "Proof of Concept",
+              "format": "CVSSv4"
+            }
+          ]
+        },
+        "packageManager": "composer",
+        "publicationTime": "2026-10-13T10:41:26.515291Z",
+        "severityBasedOn": "CVSS",
+        "modificationTime": "2026-10-25T14:06:56.493805Z",
+        "socialTrendAlert": false,
+        "severityWithCritical": "medium",
+        "from": [
+          "laravel/react-starter-kit@0.0.0",
+          "inertiajs/inertia-laravel@3.3.3",
+          "laravel/framework@13.31.0",
+          "league/commonmark@2.10.1"
+        ],
+        "upgradePath": [],
+        "isUpgradable": false,
+        "isPatchable": false,
+        "name": "league/commonmark",
+        "version": "2.10.1"
+      },
+      {
+        "id": "SNYK-PHP-LEAGUECOMMONMARK-20875274",
+        "title": "Inefficient Algorithmic Complexity",
+        "CVSSv3": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H/E:P",
+        "credit": [
+          "manus-pi"
+        ],
+        "semver": {
+          "vulnerable": [
+            ">=2.0.0, <2.10.2"
+          ]
+        },
+        "exploit": "Proof of Concept",
+        "fixedIn": [
+          "2.10.2"
+        ],
+        "patches": [],
+        "insights": {
+          "triageAdvice": null
+        },
+        "language": "php",
+        "severity": "high",
+        "cvssScore": 8.7,
+        "functions": [],
+        "malicious": false,
+        "isDisputed": false,
+        "moduleName": "league/commonmark",
+        "references": [
+          {
+            "url": "https://github.com/thephpleague/commonmark/security/advisories/GHSA-3q6v-r5mr-hxv8",
+            "title": "GitHub Advisory"
+          },
+          {
+            "url": "https://github.com/thephpleague/commonmark/commit/5f63680a5e29dd57f9c6be9743b0e90493d3c2d0",
+            "title": "GitHub Commit"
+          }
+        ],
+        "cvssDetails": [
+          {
+            "assigner": "NVD",
+            "severity": "high",
+            "cvssV3Vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+            "cvssV3BaseScore": 7.5,
+            "modificationTime": "2026-10-09T01:31:24.648476Z"
+          }
+        ],
+        "cvssSources": [
+          {
+            "type": "primary",
+            "vector": "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:N/VI:N/VA:H/SC:N/SI:N/SA:N/E:P",
+            "assigner": "Snyk",
+            "severity": "high",
+            "baseScore": 8.7,
+            "cvssVersion": "4.0",
+            "modificationTime": "2026-10-25T14:06:57.067918Z"
+          },
+          {
+            "type": "secondary",
+            "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H/E:P",
+            "assigner": "Snyk",
+            "severity": "high",
+            "baseScore": 7.5,
+            "cvssVersion": "3.1",
+            "modificationTime": "2026-10-25T14:06:57.067918Z"
+          },
+          {
+            "type": "secondary",
+            "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+            "assigner": "NVD",
+            "severity": "high",
+            "baseScore": 7.5,
+            "cvssVersion": "3.1",
+            "modificationTime": "2026-10-09T01:31:24.648476Z"
+          }
+        ],
+        "description": "## Overview\n[league/commonmark](https://packagist.org/packages/league/commonmark) is a PHP-based Markdown parser which supports the full CommonMark spec. It is based on the CommonMark JS reference implementation.\n\nAffected versions of this package are vulnerable to Inefficient Algorithmic Complexity in the `TableStartParser::tryStart` function. An attacker can exhaust CPU resources and disrupt service availability by submitting a large paragraph of pipe-free, blank-line-free lines that do not begin with a letter to any service that processes untrusted Markdown with the relevant converter or configuration.\n## Remediation\nUpgrade `league/commonmark` to version 2.10.2 or higher.\n## References\n- [GitHub Advisory](https://github.com/thephpleague/commonmark/security/advisories/GHSA-3q6v-r5mr-hxv8)\n- [GitHub Commit](https://github.com/thephpleague/commonmark/commit/5f63680a5e29dd57f9c6be9743b0e90493d3c2d0)\n",
+        "epssDetails": {
+          "percentile": "0.30373",
+          "probability": "0.00368",
+          "modelVersion": "v2026.06.15"
+        },
+        "identifiers": {
+          "CVE": [
+            "CVE-2026-105830"
+          ],
+          "CWE": [
+            "CWE-400",
+            "CWE-407"
+          ],
+          "GHSA": [
+            "GHSA-3q6v-r5mr-hxv8"
+          ]
+        },
+        "packageName": "league/commonmark",
+        "proprietary": false,
+        "creationTime": "2026-10-13T10:43:12.598736Z",
+        "functions_new": [],
+        "alternativeIds": [],
+        "disclosureTime": "2026-09-30T15:36:13Z",
+        "exploitDetails": {
+          "sources": [
+            "Snyk"
+          ],
+          "maturityLevels": [
+            {
+              "type": "secondary",
+              "level": "Proof of Concept",
+              "format": "CVSSv3"
+            },
+            {
+              "type": "primary",
+              "level": "Proof of Concept",
+              "format": "CVSSv4"
+            }
+          ]
+        },
+        "packageManager": "composer",
+        "publicationTime": "2026-10-13T10:43:12.762699Z",
+        "severityBasedOn": "CVSS",
+        "modificationTime": "2026-10-25T14:06:57.067918Z",
+        "socialTrendAlert": false,
+        "severityWithCritical": "high",
+        "from": [
+          "laravel/react-starter-kit@0.0.0",
+          "inertiajs/inertia-laravel@3.3.3",
+          "laravel/framework@13.31.0",
+          "league/commonmark@2.10.1"
+        ],
+        "upgradePath": [],
+        "isUpgradable": false,
+        "isPatchable": false,
+        "name": "league/commonmark",
+        "version": "2.10.1"
+      },
+      {
+        "id": "SNYK-PHP-SYMFONYHTTPFOUNDATION-21203763",
+        "title": "Regular Expression Denial of Service (ReDoS)",
+        "CVSSv3": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+        "credit": [
+          "r3verii"
+        ],
+        "semver": {
+          "vulnerable": [
+            ">=4.1.0, <5.4.54",
+            ">=6.0.0, <6.4.46",
+            ">=7.0.0, <7.4.19",
+            ">=8.0.0, <8.1.7"
+          ]
+        },
+        "exploit": "Not Defined",
+        "fixedIn": [
+          "5.4.54",
+          "6.4.46",
+          "7.4.19",
+          "8.1.7"
+        ],
+        "patches": [],
+        "insights": {
+          "triageAdvice": null
+        },
+        "language": "php",
+        "severity": "high",
+        "cvssScore": 8.7,
+        "functions": [],
+        "malicious": false,
+        "isDisputed": false,
+        "moduleName": "symfony/http-foundation",
+        "references": [
+          {
+            "url": "https://github.com/symfony/symfony/security/advisories/GHSA-r925-mgvr-h9cc",
+            "title": "GitHub Advisory"
+          },
+          {
+            "url": "https://github.com/symfony/symfony/pull/66048",
+            "title": "GitHub PR"
+          },
+          {
+            "url": "https://github.com/symfony/symfony/pull/66491",
+            "title": "GitHub PR"
+          },
+          {
+            "url": "https://symfony.com/blog/cve-2026-108082-redos-in-headerutils-split-reachable-through-the-cache-control-request-header",
+            "title": "Symfony Blog"
+          }
+        ],
+        "cvssDetails": [],
+        "cvssSources": [
+          {
+            "type": "primary",
+            "vector": "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:N/VI:N/VA:H/SC:N/SI:N/SA:N",
+            "assigner": "Snyk",
+            "severity": "high",
+            "baseScore": 8.7,
+            "cvssVersion": "4.0",
+            "modificationTime": "2026-10-25T14:05:46.091237Z"
+          },
+          {
+            "type": "secondary",
+            "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+            "assigner": "Snyk",
+            "severity": "high",
+            "baseScore": 7.5,
+            "cvssVersion": "3.1",
+            "modificationTime": "2026-10-25T14:05:46.091237Z"
+          }
+        ],
+        "description": "## Overview\n[symfony/http-foundation](https://symfony.com/http-foundation) is a component defines an object-oriented layer for the HTTP specification.\n\nAffected versions of this package are vulnerable to Regular Expression Denial of Service (ReDoS) via `HeaderUtils::split()` in `HeaderUtils.php`, which uses a regular expression containing an ambiguous token class that matches whitespace alongside a trailing negative lookbehind `(?<!\\s)`. A run of N whitespace characters placed before a separator can be partitioned among the iterations of the enclosing `+` quantifier in 2^N ways, all matching the same text, causing exponential backtracking. Because `HeaderBag::set()` calls `HeaderUtils::split()` for the `Cache-Control` header on every `Request` construction, an attacker can trigger this by sending an HTTP request with a `Cache-Control` header containing a long run of whitespace, causing the PHP regex engine to exhaust its backtracking limit and crash the request handler.\n\n## Details\n\nDenial of Service (DoS) describes a family of attacks, all aimed at making a system inaccessible to its original and legitimate users. There are many types of DoS attacks, ranging from trying to clog the network pipes to the system by generating a large volume of traffic from many machines (a Distributed Denial of Service - DDoS - attack) to sending crafted requests that cause a system to crash or take a disproportional amount of time to process.\n\nThe Regular expression Denial of Service (ReDoS) is a type of Denial of Service attack. Regular expressions are incredibly powerful, but they aren't very intuitive and can ultimately end up making it easy for attackers to take your site down.\n\nLet’s take the following regular expression as an example:\n```js\nregex = /A(B|C+)+D/\n```\n\nThis regular expression accomplishes the following:\n- `A` The string must start with the letter 'A'\n- `(B|C+)+` The string must then follow the letter A with either the letter 'B' or some number of occurrences of the letter 'C' (the `+` matches one or more times). The `+` at the end of this section states that we can look for one or more matches of this section.\n- `D` Finally, we ensure this section of the string ends with a 'D'\n\nThe expression would match inputs such as `ABBD`, `ABCCCCD`, `ABCBCCCD` and `ACCCCCD`\n\nIt most cases, it doesn't take very long for a regex engine to find a match:\n\n```bash\n$ time node -e '/A(B|C+)+D/.test(\"ACCCCCCCCCCCCCCCCCCCCCCCCCCCCD\")'\n0.04s user 0.01s system 95% cpu 0.052 total\n\n$ time node -e '/A(B|C+)+D/.test(\"ACCCCCCCCCCCCCCCCCCCCCCCCCCCCX\")'\n1.79s user 0.02s system 99% cpu 1.812 total\n```\n\nThe entire process of testing it against a 30 characters long string takes around ~52ms. But when given an invalid string, it takes nearly two seconds to complete the test, over ten times as long as it took to test a valid string. The dramatic difference is due to the way regular expressions get evaluated.\n\nMost Regex engines will work very similarly (with minor differences). The engine will match the first possible way to accept the current character and proceed to the next one. If it then fails to match the next one, it will backtrack and see if there was another way to digest the previous character. If it goes too far down the rabbit hole only to find out the string doesn’t match in the end, and if many characters have multiple valid regex paths, the number of backtracking steps can become very large, resulting in what is known as _catastrophic backtracking_.\n\nLet's look at how our expression runs into this problem, using a shorter string: \"ACCCX\". While it seems fairly straightforward, there are still four different ways that the engine could match those three C's:\n1. CCC\n2. CC+C\n3. C+CC\n4. C+C+C.\n\nThe engine has to try each of those combinations to see if any of them potentially match against the expression. When you combine that with the other steps the engine must take, we can use [RegEx 101 debugger](https://regex101.com/debugger) to see the engine has to take a total of 38 steps before it can determine the string doesn't match.\n\nFrom there, the number of steps the engine must use to validate a string just continues to grow.\n\n| String | Number of C's | Number of steps |\n| -------|-------------:| -----:|\n| ACCCX | 3 | 38\n| ACCCCX | 4 | 71\n| ACCCCCX | 5 | 136\n| ACCCCCCCCCCCCCCX | 14 | 65,553\n\n\nBy the time the string includes 14 C's, the engine has to take over 65,000 steps just to see if the string is valid. These extreme situations can cause them to work very slowly (exponentially related to input size, as shown above), allowing an attacker to exploit this and can cause the service to excessively consume CPU, resulting in a Denial of Service.\n\n## Remediation\nUpgrade `symfony/http-foundation` to version 5.4.54, 6.4.46, 7.4.19, 8.1.7 or higher.\n## References\n- [GitHub Advisory](https://github.com/symfony/symfony/security/advisories/GHSA-r925-mgvr-h9cc)\n- [GitHub PR](https://github.com/symfony/symfony/pull/66048)\n- [GitHub PR](https://github.com/symfony/symfony/pull/66491)\n- [Symfony Blog](https://symfony.com/blog/cve-2026-108082-redos-in-headerutils-split-reachable-through-the-cache-control-request-header)\n",
+        "epssDetails": {
+          "percentile": "0.41142",
+          "probability": "0.00480",
+          "modelVersion": "v2026.06.15"
+        },
+        "identifiers": {
+          "CVE": [
+            "CVE-2026-108082"
+          ],
+          "CWE": [
+            "CWE-1333"
+          ],
+          "GHSA": [
+            "GHSA-r925-mgvr-h9cc"
+          ]
+        },
+        "packageName": "symfony/http-foundation",
+        "proprietary": false,
+        "creationTime": "2026-10-18T14:40:30.285659Z",
+        "functions_new": [],
+        "alternativeIds": [],
+        "disclosureTime": "2026-10-15T18:00:09.352000Z",
+        "exploitDetails": {
+          "sources": [],
+          "maturityLevels": [
+            {
+              "type": "secondary",
+              "level": "Not Defined",
+              "format": "CVSSv3"
+            },
+            {
+              "type": "primary",
+              "level": "Not Defined",
+              "format": "CVSSv4"
+            }
+          ]
+        },
+        "packageManager": "composer",
+        "publicationTime": "2026-10-18T14:40:30.445710Z",
+        "severityBasedOn": "CVSS",
+        "modificationTime": "2026-10-25T14:05:46.091237Z",
+        "socialTrendAlert": false,
+        "severityWithCritical": "high",
+        "from": [
+          "laravel/react-starter-kit@0.0.0",
+          "laravel/framework@13.31.0",
+          "symfony/http-foundation@8.1.6"
+        ],
+        "upgradePath": [],
+        "isUpgradable": false,
+        "isPatchable": false,
+        "name": "symfony/http-foundation",
+        "version": "8.1.6"
+      },
+      {
+        "id": "SNYK-PHP-SYMFONYHTTPFOUNDATION-21203763",
+        "title": "Regular Expression Denial of Service (ReDoS)",
+        "CVSSv3": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+        "credit": [
+          "r3verii"
+        ],
+        "semver": {
+          "vulnerable": [
+            ">=4.1.0, <5.4.54",
+            ">=6.0.0, <6.4.46",
+            ">=7.0.0, <7.4.19",
+            ">=8.0.0, <8.1.7"
+          ]
+        },
+        "exploit": "Not Defined",
+        "fixedIn": [
+          "5.4.54",
+          "6.4.46",
+          "7.4.19",
+          "8.1.7"
+        ],
+        "patches": [],
+        "insights": {
+          "triageAdvice": null
+        },
+        "language": "php",
+        "severity": "high",
+        "cvssScore": 8.7,
+        "functions": [],
+        "malicious": false,
+        "isDisputed": false,
+        "moduleName": "symfony/http-foundation",
+        "references": [
+          {
+            "url": "https://github.com/symfony/symfony/security/advisories/GHSA-r925-mgvr-h9cc",
+            "title": "GitHub Advisory"
+          },
+          {
+            "url": "https://github.com/symfony/symfony/pull/66048",
+            "title": "GitHub PR"
+          },
+          {
+            "url": "https://github.com/symfony/symfony/pull/66491",
+            "title": "GitHub PR"
+          },
+          {
+            "url": "https://symfony.com/blog/cve-2026-108082-redos-in-headerutils-split-reachable-through-the-cache-control-request-header",
+            "title": "Symfony Blog"
+          }
+        ],
+        "cvssDetails": [],
+        "cvssSources": [
+          {
+            "type": "primary",
+            "vector": "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:N/VI:N/VA:H/SC:N/SI:N/SA:N",
+            "assigner": "Snyk",
+            "severity": "high",
+            "baseScore": 8.7,
+            "cvssVersion": "4.0",
+            "modificationTime": "2026-10-25T14:05:46.091237Z"
+          },
+          {
+            "type": "secondary",
+            "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+            "assigner": "Snyk",
+            "severity": "high",
+            "baseScore": 7.5,
+            "cvssVersion": "3.1",
+            "modificationTime": "2026-10-25T14:05:46.091237Z"
+          }
+        ],
+        "description": "## Overview\n[symfony/http-foundation](https://symfony.com/http-foundation) is a component defines an object-oriented layer for the HTTP specification.\n\nAffected versions of this package are vulnerable to Regular Expression Denial of Service (ReDoS) via `HeaderUtils::split()` in `HeaderUtils.php`, which uses a regular expression containing an ambiguous token class that matches whitespace alongside a trailing negative lookbehind `(?<!\\s)`. A run of N whitespace characters placed before a separator can be partitioned among the iterations of the enclosing `+` quantifier in 2^N ways, all matching the same text, causing exponential backtracking. Because `HeaderBag::set()` calls `HeaderUtils::split()` for the `Cache-Control` header on every `Request` construction, an attacker can trigger this by sending an HTTP request with a `Cache-Control` header containing a long run of whitespace, causing the PHP regex engine to exhaust its backtracking limit and crash the request handler.\n\n## Details\n\nDenial of Service (DoS) describes a family of attacks, all aimed at making a system inaccessible to its original and legitimate users. There are many types of DoS attacks, ranging from trying to clog the network pipes to the system by generating a large volume of traffic from many machines (a Distributed Denial of Service - DDoS - attack) to sending crafted requests that cause a system to crash or take a disproportional amount of time to process.\n\nThe Regular expression Denial of Service (ReDoS) is a type of Denial of Service attack. Regular expressions are incredibly powerful, but they aren't very intuitive and can ultimately end up making it easy for attackers to take your site down.\n\nLet’s take the following regular expression as an example:\n```js\nregex = /A(B|C+)+D/\n```\n\nThis regular expression accomplishes the following:\n- `A` The string must start with the letter 'A'\n- `(B|C+)+` The string must then follow the letter A with either the letter 'B' or some number of occurrences of the letter 'C' (the `+` matches one or more times). The `+` at the end of this section states that we can look for one or more matches of this section.\n- `D` Finally, we ensure this section of the string ends with a 'D'\n\nThe expression would match inputs such as `ABBD`, `ABCCCCD`, `ABCBCCCD` and `ACCCCCD`\n\nIt most cases, it doesn't take very long for a regex engine to find a match:\n\n```bash\n$ time node -e '/A(B|C+)+D/.test(\"ACCCCCCCCCCCCCCCCCCCCCCCCCCCCD\")'\n0.04s user 0.01s system 95% cpu 0.052 total\n\n$ time node -e '/A(B|C+)+D/.test(\"ACCCCCCCCCCCCCCCCCCCCCCCCCCCCX\")'\n1.79s user 0.02s system 99% cpu 1.812 total\n```\n\nThe entire process of testing it against a 30 characters long string takes around ~52ms. But when given an invalid string, it takes nearly two seconds to complete the test, over ten times as long as it took to test a valid string. The dramatic difference is due to the way regular expressions get evaluated.\n\nMost Regex engines will work very similarly (with minor differences). The engine will match the first possible way to accept the current character and proceed to the next one. If it then fails to match the next one, it will backtrack and see if there was another way to digest the previous character. If it goes too far down the rabbit hole only to find out the string doesn’t match in the end, and if many characters have multiple valid regex paths, the number of backtracking steps can become very large, resulting in what is known as _catastrophic backtracking_.\n\nLet's look at how our expression runs into this problem, using a shorter string: \"ACCCX\". While it seems fairly straightforward, there are still four different ways that the engine could match those three C's:\n1. CCC\n2. CC+C\n3. C+CC\n4. C+C+C.\n\nThe engine has to try each of those combinations to see if any of them potentially match against the expression. When you combine that with the other steps the engine must take, we can use [RegEx 101 debugger](https://regex101.com/debugger) to see the engine has to take a total of 38 steps before it can determine the string doesn't match.\n\nFrom there, the number of steps the engine must use to validate a string just continues to grow.\n\n| String | Number of C's | Number of steps |\n| -------|-------------:| -----:|\n| ACCCX | 3 | 38\n| ACCCCX | 4 | 71\n| ACCCCCX | 5 | 136\n| ACCCCCCCCCCCCCCX | 14 | 65,553\n\n\nBy the time the string includes 14 C's, the engine has to take over 65,000 steps just to see if the string is valid. These extreme situations can cause them to work very slowly (exponentially related to input size, as shown above), allowing an attacker to exploit this and can cause the service to excessively consume CPU, resulting in a Denial of Service.\n\n## Remediation\nUpgrade `symfony/http-foundation` to version 5.4.54, 6.4.46, 7.4.19, 8.1.7 or higher.\n## References\n- [GitHub Advisory](https://github.com/symfony/symfony/security/advisories/GHSA-r925-mgvr-h9cc)\n- [GitHub PR](https://github.com/symfony/symfony/pull/66048)\n- [GitHub PR](https://github.com/symfony/symfony/pull/66491)\n- [Symfony Blog](https://symfony.com/blog/cve-2026-108082-redos-in-headerutils-split-reachable-through-the-cache-control-request-header)\n",
+        "epssDetails": {
+          "percentile": "0.41142",
+          "probability": "0.00480",
+          "modelVersion": "v2026.06.15"
+        },
+        "identifiers": {
+          "CVE": [
+            "CVE-2026-108082"
+          ],
+          "CWE": [
+            "CWE-1333"
+          ],
+          "GHSA": [
+            "GHSA-r925-mgvr-h9cc"
+          ]
+        },
+        "packageName": "symfony/http-foundation",
+        "proprietary": false,
+        "creationTime": "2026-10-18T14:40:30.285659Z",
+        "functions_new": [],
+        "alternativeIds": [],
+        "disclosureTime": "2026-10-15T18:00:09.352000Z",
+        "exploitDetails": {
+          "sources": [],
+          "maturityLevels": [
+            {
+              "type": "secondary",
+              "level": "Not Defined",
+              "format": "CVSSv3"
+            },
+            {
+              "type": "primary",
+              "level": "Not Defined",
+              "format": "CVSSv4"
+            }
+          ]
+        },
+        "packageManager": "composer",
+        "publicationTime": "2026-10-18T14:40:30.445710Z",
+        "severityBasedOn": "CVSS",
+        "modificationTime": "2026-10-25T14:05:46.091237Z",
+        "socialTrendAlert": false,
+        "severityWithCritical": "high",
+        "from": [
+          "laravel/react-starter-kit@0.0.0",
+          "laravel/framework@13.31.0",
+          "fruitcake/php-cors@1.4.0",
+          "symfony/http-foundation@8.1.6"
+        ],
+        "upgradePath": [],
+        "isUpgradable": false,
+        "isPatchable": false,
+        "name": "symfony/http-foundation",
+        "version": "8.1.6"
+      },
+      {
+        "id": "SNYK-PHP-SYMFONYHTTPFOUNDATION-21203763",
+        "title": "Regular Expression Denial of Service (ReDoS)",
+        "CVSSv3": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+        "credit": [
+          "r3verii"
+        ],
+        "semver": {
+          "vulnerable": [
+            ">=4.1.0, <5.4.54",
+            ">=6.0.0, <6.4.46",
+            ">=7.0.0, <7.4.19",
+            ">=8.0.0, <8.1.7"
+          ]
+        },
+        "exploit": "Not Defined",
+        "fixedIn": [
+          "5.4.54",
+          "6.4.46",
+          "7.4.19",
+          "8.1.7"
+        ],
+        "patches": [],
+        "insights": {
+          "triageAdvice": null
+        },
+        "language": "php",
+        "severity": "high",
+        "cvssScore": 8.7,
+        "functions": [],
+        "malicious": false,
+        "isDisputed": false,
+        "moduleName": "symfony/http-foundation",
+        "references": [
+          {
+            "url": "https://github.com/symfony/symfony/security/advisories/GHSA-r925-mgvr-h9cc",
+            "title": "GitHub Advisory"
+          },
+          {
+            "url": "https://github.com/symfony/symfony/pull/66048",
+            "title": "GitHub PR"
+          },
+          {
+            "url": "https://github.com/symfony/symfony/pull/66491",
+            "title": "GitHub PR"
+          },
+          {
+            "url": "https://symfony.com/blog/cve-2026-108082-redos-in-headerutils-split-reachable-through-the-cache-control-request-header",
+            "title": "Symfony Blog"
+          }
+        ],
+        "cvssDetails": [],
+        "cvssSources": [
+          {
+            "type": "primary",
+            "vector": "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:N/VI:N/VA:H/SC:N/SI:N/SA:N",
+            "assigner": "Snyk",
+            "severity": "high",
+            "baseScore": 8.7,
+            "cvssVersion": "4.0",
+            "modificationTime": "2026-10-25T14:05:46.091237Z"
+          },
+          {
+            "type": "secondary",
+            "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+            "assigner": "Snyk",
+            "severity": "high",
+            "baseScore": 7.5,
+            "cvssVersion": "3.1",
+            "modificationTime": "2026-10-25T14:05:46.091237Z"
+          }
+        ],
+        "description": "## Overview\n[symfony/http-foundation](https://symfony.com/http-foundation) is a component defines an object-oriented layer for the HTTP specification.\n\nAffected versions of this package are vulnerable to Regular Expression Denial of Service (ReDoS) via `HeaderUtils::split()` in `HeaderUtils.php`, which uses a regular expression containing an ambiguous token class that matches whitespace alongside a trailing negative lookbehind `(?<!\\s)`. A run of N whitespace characters placed before a separator can be partitioned among the iterations of the enclosing `+` quantifier in 2^N ways, all matching the same text, causing exponential backtracking. Because `HeaderBag::set()` calls `HeaderUtils::split()` for the `Cache-Control` header on every `Request` construction, an attacker can trigger this by sending an HTTP request with a `Cache-Control` header containing a long run of whitespace, causing the PHP regex engine to exhaust its backtracking limit and crash the request handler.\n\n## Details\n\nDenial of Service (DoS) describes a family of attacks, all aimed at making a system inaccessible to its original and legitimate users. There are many types of DoS attacks, ranging from trying to clog the network pipes to the system by generating a large volume of traffic from many machines (a Distributed Denial of Service - DDoS - attack) to sending crafted requests that cause a system to crash or take a disproportional amount of time to process.\n\nThe Regular expression Denial of Service (ReDoS) is a type of Denial of Service attack. Regular expressions are incredibly powerful, but they aren't very intuitive and can ultimately end up making it easy for attackers to take your site down.\n\nLet’s take the following regular expression as an example:\n```js\nregex = /A(B|C+)+D/\n```\n\nThis regular expression accomplishes the following:\n- `A` The string must start with the letter 'A'\n- `(B|C+)+` The string must then follow the letter A with either the letter 'B' or some number of occurrences of the letter 'C' (the `+` matches one or more times). The `+` at the end of this section states that we can look for one or more matches of this section.\n- `D` Finally, we ensure this section of the string ends with a 'D'\n\nThe expression would match inputs such as `ABBD`, `ABCCCCD`, `ABCBCCCD` and `ACCCCCD`\n\nIt most cases, it doesn't take very long for a regex engine to find a match:\n\n```bash\n$ time node -e '/A(B|C+)+D/.test(\"ACCCCCCCCCCCCCCCCCCCCCCCCCCCCD\")'\n0.04s user 0.01s system 95% cpu 0.052 total\n\n$ time node -e '/A(B|C+)+D/.test(\"ACCCCCCCCCCCCCCCCCCCCCCCCCCCCX\")'\n1.79s user 0.02s system 99% cpu 1.812 total\n```\n\nThe entire process of testing it against a 30 characters long string takes around ~52ms. But when given an invalid string, it takes nearly two seconds to complete the test, over ten times as long as it took to test a valid string. The dramatic difference is due to the way regular expressions get evaluated.\n\nMost Regex engines will work very similarly (with minor differences). The engine will match the first possible way to accept the current character and proceed to the next one. If it then fails to match the next one, it will backtrack and see if there was another way to digest the previous character. If it goes too far down the rabbit hole only to find out the string doesn’t match in the end, and if many characters have multiple valid regex paths, the number of backtracking steps can become very large, resulting in what is known as _catastrophic backtracking_.\n\nLet's look at how our expression runs into this problem, using a shorter string: \"ACCCX\". While it seems fairly straightforward, there are still four different ways that the engine could match those three C's:\n1. CCC\n2. CC+C\n3. C+CC\n4. C+C+C.\n\nThe engine has to try each of those combinations to see if any of them potentially match against the expression. When you combine that with the other steps the engine must take, we can use [RegEx 101 debugger](https://regex101.com/debugger) to see the engine has to take a total of 38 steps before it can determine the string doesn't match.\n\nFrom there, the number of steps the engine must use to validate a string just continues to grow.\n\n| String | Number of C's | Number of steps |\n| -------|-------------:| -----:|\n| ACCCX | 3 | 38\n| ACCCCX | 4 | 71\n| ACCCCCX | 5 | 136\n| ACCCCCCCCCCCCCCX | 14 | 65,553\n\n\nBy the time the string includes 14 C's, the engine has to take over 65,000 steps just to see if the string is valid. These extreme situations can cause them to work very slowly (exponentially related to input size, as shown above), allowing an attacker to exploit this and can cause the service to excessively consume CPU, resulting in a Denial of Service.\n\n## Remediation\nUpgrade `symfony/http-foundation` to version 5.4.54, 6.4.46, 7.4.19, 8.1.7 or higher.\n## References\n- [GitHub Advisory](https://github.com/symfony/symfony/security/advisories/GHSA-r925-mgvr-h9cc)\n- [GitHub PR](https://github.com/symfony/symfony/pull/66048)\n- [GitHub PR](https://github.com/symfony/symfony/pull/66491)\n- [Symfony Blog](https://symfony.com/blog/cve-2026-108082-redos-in-headerutils-split-reachable-through-the-cache-control-request-header)\n",
+        "epssDetails": {
+          "percentile": "0.41142",
+          "probability": "0.00480",
+          "modelVersion": "v2026.06.15"
+        },
+        "identifiers": {
+          "CVE": [
+            "CVE-2026-108082"
+          ],
+          "CWE": [
+            "CWE-1333"
+          ],
+          "GHSA": [
+            "GHSA-r925-mgvr-h9cc"
+          ]
+        },
+        "packageName": "symfony/http-foundation",
+        "proprietary": false,
+        "creationTime": "2026-10-18T14:40:30.285659Z",
+        "functions_new": [],
+        "alternativeIds": [],
+        "disclosureTime": "2026-10-15T18:00:09.352000Z",
+        "exploitDetails": {
+          "sources": [],
+          "maturityLevels": [
+            {
+              "type": "secondary",
+              "level": "Not Defined",
+              "format": "CVSSv3"
+            },
+            {
+              "type": "primary",
+              "level": "Not Defined",
+              "format": "CVSSv4"
+            }
+          ]
+        },
+        "packageManager": "composer",
+        "publicationTime": "2026-10-18T14:40:30.445710Z",
+        "severityBasedOn": "CVSS",
+        "modificationTime": "2026-10-25T14:05:46.091237Z",
+        "socialTrendAlert": false,
+        "severityWithCritical": "high",
+        "from": [
+          "laravel/react-starter-kit@0.0.0",
+          "laravel/framework@13.31.0",
+          "symfony/http-kernel@8.1.6",
+          "symfony/http-foundation@8.1.6"
+        ],
+        "upgradePath": [],
+        "isUpgradable": false,
+        "isPatchable": false,
+        "name": "symfony/http-foundation",
+        "version": "8.1.6"
+      },
+      {
+        "id": "SNYK-PHP-SYMFONYHTTPFOUNDATION-21203763",
+        "title": "Regular Expression Denial of Service (ReDoS)",
+        "CVSSv3": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+        "credit": [
+          "r3verii"
+        ],
+        "semver": {
+          "vulnerable": [
+            ">=4.1.0, <5.4.54",
+            ">=6.0.0, <6.4.46",
+            ">=7.0.0, <7.4.19",
+            ">=8.0.0, <8.1.7"
+          ]
+        },
+        "exploit": "Not Defined",
+        "fixedIn": [
+          "5.4.54",
+          "6.4.46",
+          "7.4.19",
+          "8.1.7"
+        ],
+        "patches": [],
+        "insights": {
+          "triageAdvice": null
+        },
+        "language": "php",
+        "severity": "high",
+        "cvssScore": 8.7,
+        "functions": [],
+        "malicious": false,
+        "isDisputed": false,
+        "moduleName": "symfony/http-foundation",
+        "references": [
+          {
+            "url": "https://github.com/symfony/symfony/security/advisories/GHSA-r925-mgvr-h9cc",
+            "title": "GitHub Advisory"
+          },
+          {
+            "url": "https://github.com/symfony/symfony/pull/66048",
+            "title": "GitHub PR"
+          },
+          {
+            "url": "https://github.com/symfony/symfony/pull/66491",
+            "title": "GitHub PR"
+          },
+          {
+            "url": "https://symfony.com/blog/cve-2026-108082-redos-in-headerutils-split-reachable-through-the-cache-control-request-header",
+            "title": "Symfony Blog"
+          }
+        ],
+        "cvssDetails": [],
+        "cvssSources": [
+          {
+            "type": "primary",
+            "vector": "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:N/VI:N/VA:H/SC:N/SI:N/SA:N",
+            "assigner": "Snyk",
+            "severity": "high",
+            "baseScore": 8.7,
+            "cvssVersion": "4.0",
+            "modificationTime": "2026-10-25T14:05:46.091237Z"
+          },
+          {
+            "type": "secondary",
+            "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+            "assigner": "Snyk",
+            "severity": "high",
+            "baseScore": 7.5,
+            "cvssVersion": "3.1",
+            "modificationTime": "2026-10-25T14:05:46.091237Z"
+          }
+        ],
+        "description": "## Overview\n[symfony/http-foundation](https://symfony.com/http-foundation) is a component defines an object-oriented layer for the HTTP specification.\n\nAffected versions of this package are vulnerable to Regular Expression Denial of Service (ReDoS) via `HeaderUtils::split()` in `HeaderUtils.php`, which uses a regular expression containing an ambiguous token class that matches whitespace alongside a trailing negative lookbehind `(?<!\\s)`. A run of N whitespace characters placed before a separator can be partitioned among the iterations of the enclosing `+` quantifier in 2^N ways, all matching the same text, causing exponential backtracking. Because `HeaderBag::set()` calls `HeaderUtils::split()` for the `Cache-Control` header on every `Request` construction, an attacker can trigger this by sending an HTTP request with a `Cache-Control` header containing a long run of whitespace, causing the PHP regex engine to exhaust its backtracking limit and crash the request handler.\n\n## Details\n\nDenial of Service (DoS) describes a family of attacks, all aimed at making a system inaccessible to its original and legitimate users. There are many types of DoS attacks, ranging from trying to clog the network pipes to the system by generating a large volume of traffic from many machines (a Distributed Denial of Service - DDoS - attack) to sending crafted requests that cause a system to crash or take a disproportional amount of time to process.\n\nThe Regular expression Denial of Service (ReDoS) is a type of Denial of Service attack. Regular expressions are incredibly powerful, but they aren't very intuitive and can ultimately end up making it easy for attackers to take your site down.\n\nLet’s take the following regular expression as an example:\n```js\nregex = /A(B|C+)+D/\n```\n\nThis regular expression accomplishes the following:\n- `A` The string must start with the letter 'A'\n- `(B|C+)+` The string must then follow the letter A with either the letter 'B' or some number of occurrences of the letter 'C' (the `+` matches one or more times). The `+` at the end of this section states that we can look for one or more matches of this section.\n- `D` Finally, we ensure this section of the string ends with a 'D'\n\nThe expression would match inputs such as `ABBD`, `ABCCCCD`, `ABCBCCCD` and `ACCCCCD`\n\nIt most cases, it doesn't take very long for a regex engine to find a match:\n\n```bash\n$ time node -e '/A(B|C+)+D/.test(\"ACCCCCCCCCCCCCCCCCCCCCCCCCCCCD\")'\n0.04s user 0.01s system 95% cpu 0.052 total\n\n$ time node -e '/A(B|C+)+D/.test(\"ACCCCCCCCCCCCCCCCCCCCCCCCCCCCX\")'\n1.79s user 0.02s system 99% cpu 1.812 total\n```\n\nThe entire process of testing it against a 30 characters long string takes around ~52ms. But when given an invalid string, it takes nearly two seconds to complete the test, over ten times as long as it took to test a valid string. The dramatic difference is due to the way regular expressions get evaluated.\n\nMost Regex engines will work very similarly (with minor differences). The engine will match the first possible way to accept the current character and proceed to the next one. If it then fails to match the next one, it will backtrack and see if there was another way to digest the previous character. If it goes too far down the rabbit hole only to find out the string doesn’t match in the end, and if many characters have multiple valid regex paths, the number of backtracking steps can become very large, resulting in what is known as _catastrophic backtracking_.\n\nLet's look at how our expression runs into this problem, using a shorter string: \"ACCCX\". While it seems fairly straightforward, there are still four different ways that the engine could match those three C's:\n1. CCC\n2. CC+C\n3. C+CC\n4. C+C+C.\n\nThe engine has to try each of those combinations to see if any of them potentially match against the expression. When you combine that with the other steps the engine must take, we can use [RegEx 101 debugger](https://regex101.com/debugger) to see the engine has to take a total of 38 steps before it can determine the string doesn't match.\n\nFrom there, the number of steps the engine must use to validate a string just continues to grow.\n\n| String | Number of C's | Number of steps |\n| -------|-------------:| -----:|\n| ACCCX | 3 | 38\n| ACCCCX | 4 | 71\n| ACCCCCX | 5 | 136\n| ACCCCCCCCCCCCCCX | 14 | 65,553\n\n\nBy the time the string includes 14 C's, the engine has to take over 65,000 steps just to see if the string is valid. These extreme situations can cause them to work very slowly (exponentially related to input size, as shown above), allowing an attacker to exploit this and can cause the service to excessively consume CPU, resulting in a Denial of Service.\n\n## Remediation\nUpgrade `symfony/http-foundation` to version 5.4.54, 6.4.46, 7.4.19, 8.1.7 or higher.\n## References\n- [GitHub Advisory](https://github.com/symfony/symfony/security/advisories/GHSA-r925-mgvr-h9cc)\n- [GitHub PR](https://github.com/symfony/symfony/pull/66048)\n- [GitHub PR](https://github.com/symfony/symfony/pull/66491)\n- [Symfony Blog](https://symfony.com/blog/cve-2026-108082-redos-in-headerutils-split-reachable-through-the-cache-control-request-header)\n",
+        "epssDetails": {
+          "percentile": "0.41142",
+          "probability": "0.00480",
+          "modelVersion": "v2026.06.15"
+        },
+        "identifiers": {
+          "CVE": [
+            "CVE-2026-108082"
+          ],
+          "CWE": [
+            "CWE-1333"
+          ],
+          "GHSA": [
+            "GHSA-r925-mgvr-h9cc"
+          ]
+        },
+        "packageName": "symfony/http-foundation",
+        "proprietary": false,
+        "creationTime": "2026-10-18T14:40:30.285659Z",
+        "functions_new": [],
+        "alternativeIds": [],
+        "disclosureTime": "2026-10-15T18:00:09.352000Z",
+        "exploitDetails": {
+          "sources": [],
+          "maturityLevels": [
+            {
+              "type": "secondary",
+              "level": "Not Defined",
+              "format": "CVSSv3"
+            },
+            {
+              "type": "primary",
+              "level": "Not Defined",
+              "format": "CVSSv4"
+            }
+          ]
+        },
+        "packageManager": "composer",
+        "publicationTime": "2026-10-18T14:40:30.445710Z",
+        "severityBasedOn": "CVSS",
+        "modificationTime": "2026-10-25T14:05:46.091237Z",
+        "socialTrendAlert": false,
+        "severityWithCritical": "high",
+        "from": [
+          "laravel/react-starter-kit@0.0.0",
+          "inertiajs/inertia-laravel@3.3.3",
+          "laravel/framework@13.31.0",
+          "symfony/http-foundation@8.1.6"
+        ],
+        "upgradePath": [],
+        "isUpgradable": false,
+        "isPatchable": false,
+        "name": "symfony/http-foundation",
+        "version": "8.1.6"
+      },
+      {
+        "id": "SNYK-PHP-SYMFONYHTTPFOUNDATION-21203763",
+        "title": "Regular Expression Denial of Service (ReDoS)",
+        "CVSSv3": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+        "credit": [
+          "r3verii"
+        ],
+        "semver": {
+          "vulnerable": [
+            ">=4.1.0, <5.4.54",
+            ">=6.0.0, <6.4.46",
+            ">=7.0.0, <7.4.19",
+            ">=8.0.0, <8.1.7"
+          ]
+        },
+        "exploit": "Not Defined",
+        "fixedIn": [
+          "5.4.54",
+          "6.4.46",
+          "7.4.19",
+          "8.1.7"
+        ],
+        "patches": [],
+        "insights": {
+          "triageAdvice": null
+        },
+        "language": "php",
+        "severity": "high",
+        "cvssScore": 8.7,
+        "functions": [],
+        "malicious": false,
+        "isDisputed": false,
+        "moduleName": "symfony/http-foundation",
+        "references": [
+          {
+            "url": "https://github.com/symfony/symfony/security/advisories/GHSA-r925-mgvr-h9cc",
+            "title": "GitHub Advisory"
+          },
+          {
+            "url": "https://github.com/symfony/symfony/pull/66048",
+            "title": "GitHub PR"
+          },
+          {
+            "url": "https://github.com/symfony/symfony/pull/66491",
+            "title": "GitHub PR"
+          },
+          {
+            "url": "https://symfony.com/blog/cve-2026-108082-redos-in-headerutils-split-reachable-through-the-cache-control-request-header",
+            "title": "Symfony Blog"
+          }
+        ],
+        "cvssDetails": [],
+        "cvssSources": [
+          {
+            "type": "primary",
+            "vector": "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:N/VI:N/VA:H/SC:N/SI:N/SA:N",
+            "assigner": "Snyk",
+            "severity": "high",
+            "baseScore": 8.7,
+            "cvssVersion": "4.0",
+            "modificationTime": "2026-10-25T14:05:46.091237Z"
+          },
+          {
+            "type": "secondary",
+            "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+            "assigner": "Snyk",
+            "severity": "high",
+            "baseScore": 7.5,
+            "cvssVersion": "3.1",
+            "modificationTime": "2026-10-25T14:05:46.091237Z"
+          }
+        ],
+        "description": "## Overview\n[symfony/http-foundation](https://symfony.com/http-foundation) is a component defines an object-oriented layer for the HTTP specification.\n\nAffected versions of this package are vulnerable to Regular Expression Denial of Service (ReDoS) via `HeaderUtils::split()` in `HeaderUtils.php`, which uses a regular expression containing an ambiguous token class that matches whitespace alongside a trailing negative lookbehind `(?<!\\s)`. A run of N whitespace characters placed before a separator can be partitioned among the iterations of the enclosing `+` quantifier in 2^N ways, all matching the same text, causing exponential backtracking. Because `HeaderBag::set()` calls `HeaderUtils::split()` for the `Cache-Control` header on every `Request` construction, an attacker can trigger this by sending an HTTP request with a `Cache-Control` header containing a long run of whitespace, causing the PHP regex engine to exhaust its backtracking limit and crash the request handler.\n\n## Details\n\nDenial of Service (DoS) describes a family of attacks, all aimed at making a system inaccessible to its original and legitimate users. There are many types of DoS attacks, ranging from trying to clog the network pipes to the system by generating a large volume of traffic from many machines (a Distributed Denial of Service - DDoS - attack) to sending crafted requests that cause a system to crash or take a disproportional amount of time to process.\n\nThe Regular expression Denial of Service (ReDoS) is a type of Denial of Service attack. Regular expressions are incredibly powerful, but they aren't very intuitive and can ultimately end up making it easy for attackers to take your site down.\n\nLet’s take the following regular expression as an example:\n```js\nregex = /A(B|C+)+D/\n```\n\nThis regular expression accomplishes the following:\n- `A` The string must start with the letter 'A'\n- `(B|C+)+` The string must then follow the letter A with either the letter 'B' or some number of occurrences of the letter 'C' (the `+` matches one or more times). The `+` at the end of this section states that we can look for one or more matches of this section.\n- `D` Finally, we ensure this section of the string ends with a 'D'\n\nThe expression would match inputs such as `ABBD`, `ABCCCCD`, `ABCBCCCD` and `ACCCCCD`\n\nIt most cases, it doesn't take very long for a regex engine to find a match:\n\n```bash\n$ time node -e '/A(B|C+)+D/.test(\"ACCCCCCCCCCCCCCCCCCCCCCCCCCCCD\")'\n0.04s user 0.01s system 95% cpu 0.052 total\n\n$ time node -e '/A(B|C+)+D/.test(\"ACCCCCCCCCCCCCCCCCCCCCCCCCCCCX\")'\n1.79s user 0.02s system 99% cpu 1.812 total\n```\n\nThe entire process of testing it against a 30 characters long string takes around ~52ms. But when given an invalid string, it takes nearly two seconds to complete the test, over ten times as long as it took to test a valid string. The dramatic difference is due to the way regular expressions get evaluated.\n\nMost Regex engines will work very similarly (with minor differences). The engine will match the first possible way to accept the current character and proceed to the next one. If it then fails to match the next one, it will backtrack and see if there was another way to digest the previous character. If it goes too far down the rabbit hole only to find out the string doesn’t match in the end, and if many characters have multiple valid regex paths, the number of backtracking steps can become very large, resulting in what is known as _catastrophic backtracking_.\n\nLet's look at how our expression runs into this problem, using a shorter string: \"ACCCX\". While it seems fairly straightforward, there are still four different ways that the engine could match those three C's:\n1. CCC\n2. CC+C\n3. C+CC\n4. C+C+C.\n\nThe engine has to try each of those combinations to see if any of them potentially match against the expression. When you combine that with the other steps the engine must take, we can use [RegEx 101 debugger](https://regex101.com/debugger) to see the engine has to take a total of 38 steps before it can determine the string doesn't match.\n\nFrom there, the number of steps the engine must use to validate a string just continues to grow.\n\n| String | Number of C's | Number of steps |\n| -------|-------------:| -----:|\n| ACCCX | 3 | 38\n| ACCCCX | 4 | 71\n| ACCCCCX | 5 | 136\n| ACCCCCCCCCCCCCCX | 14 | 65,553\n\n\nBy the time the string includes 14 C's, the engine has to take over 65,000 steps just to see if the string is valid. These extreme situations can cause them to work very slowly (exponentially related to input size, as shown above), allowing an attacker to exploit this and can cause the service to excessively consume CPU, resulting in a Denial of Service.\n\n## Remediation\nUpgrade `symfony/http-foundation` to version 5.4.54, 6.4.46, 7.4.19, 8.1.7 or higher.\n## References\n- [GitHub Advisory](https://github.com/symfony/symfony/security/advisories/GHSA-r925-mgvr-h9cc)\n- [GitHub PR](https://github.com/symfony/symfony/pull/66048)\n- [GitHub PR](https://github.com/symfony/symfony/pull/66491)\n- [Symfony Blog](https://symfony.com/blog/cve-2026-108082-redos-in-headerutils-split-reachable-through-the-cache-control-request-header)\n",
+        "epssDetails": {
+          "percentile": "0.41142",
+          "probability": "0.00480",
+          "modelVersion": "v2026.06.15"
+        },
+        "identifiers": {
+          "CVE": [
+            "CVE-2026-108082"
+          ],
+          "CWE": [
+            "CWE-1333"
+          ],
+          "GHSA": [
+            "GHSA-r925-mgvr-h9cc"
+          ]
+        },
+        "packageName": "symfony/http-foundation",
+        "proprietary": false,
+        "creationTime": "2026-10-18T14:40:30.285659Z",
+        "functions_new": [],
+        "alternativeIds": [],
+        "disclosureTime": "2026-10-15T18:00:09.352000Z",
+        "exploitDetails": {
+          "sources": [],
+          "maturityLevels": [
+            {
+              "type": "secondary",
+              "level": "Not Defined",
+              "format": "CVSSv3"
+            },
+            {
+              "type": "primary",
+              "level": "Not Defined",
+              "format": "CVSSv4"
+            }
+          ]
+        },
+        "packageManager": "composer",
+        "publicationTime": "2026-10-18T14:40:30.445710Z",
+        "severityBasedOn": "CVSS",
+        "modificationTime": "2026-10-25T14:05:46.091237Z",
+        "socialTrendAlert": false,
+        "severityWithCritical": "high",
+        "from": [
+          "laravel/react-starter-kit@0.0.0",
+          "inertiajs/inertia-laravel@3.3.3",
+          "laravel/framework@13.31.0",
+          "fruitcake/php-cors@1.4.0",
+          "symfony/http-foundation@8.1.6"
+        ],
+        "upgradePath": [],
+        "isUpgradable": false,
+        "isPatchable": false,
+        "name": "symfony/http-foundation",
+        "version": "8.1.6"
+      },
+      {
+        "id": "SNYK-PHP-SYMFONYHTTPFOUNDATION-21203763",
+        "title": "Regular Expression Denial of Service (ReDoS)",
+        "CVSSv3": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+        "credit": [
+          "r3verii"
+        ],
+        "semver": {
+          "vulnerable": [
+            ">=4.1.0, <5.4.54",
+            ">=6.0.0, <6.4.46",
+            ">=7.0.0, <7.4.19",
+            ">=8.0.0, <8.1.7"
+          ]
+        },
+        "exploit": "Not Defined",
+        "fixedIn": [
+          "5.4.54",
+          "6.4.46",
+          "7.4.19",
+          "8.1.7"
+        ],
+        "patches": [],
+        "insights": {
+          "triageAdvice": null
+        },
+        "language": "php",
+        "severity": "high",
+        "cvssScore": 8.7,
+        "functions": [],
+        "malicious": false,
+        "isDisputed": false,
+        "moduleName": "symfony/http-foundation",
+        "references": [
+          {
+            "url": "https://github.com/symfony/symfony/security/advisories/GHSA-r925-mgvr-h9cc",
+            "title": "GitHub Advisory"
+          },
+          {
+            "url": "https://github.com/symfony/symfony/pull/66048",
+            "title": "GitHub PR"
+          },
+          {
+            "url": "https://github.com/symfony/symfony/pull/66491",
+            "title": "GitHub PR"
+          },
+          {
+            "url": "https://symfony.com/blog/cve-2026-108082-redos-in-headerutils-split-reachable-through-the-cache-control-request-header",
+            "title": "Symfony Blog"
+          }
+        ],
+        "cvssDetails": [],
+        "cvssSources": [
+          {
+            "type": "primary",
+            "vector": "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:N/VI:N/VA:H/SC:N/SI:N/SA:N",
+            "assigner": "Snyk",
+            "severity": "high",
+            "baseScore": 8.7,
+            "cvssVersion": "4.0",
+            "modificationTime": "2026-10-25T14:05:46.091237Z"
+          },
+          {
+            "type": "secondary",
+            "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+            "assigner": "Snyk",
+            "severity": "high",
+            "baseScore": 7.5,
+            "cvssVersion": "3.1",
+            "modificationTime": "2026-10-25T14:05:46.091237Z"
+          }
+        ],
+        "description": "## Overview\n[symfony/http-foundation](https://symfony.com/http-foundation) is a component defines an object-oriented layer for the HTTP specification.\n\nAffected versions of this package are vulnerable to Regular Expression Denial of Service (ReDoS) via `HeaderUtils::split()` in `HeaderUtils.php`, which uses a regular expression containing an ambiguous token class that matches whitespace alongside a trailing negative lookbehind `(?<!\\s)`. A run of N whitespace characters placed before a separator can be partitioned among the iterations of the enclosing `+` quantifier in 2^N ways, all matching the same text, causing exponential backtracking. Because `HeaderBag::set()` calls `HeaderUtils::split()` for the `Cache-Control` header on every `Request` construction, an attacker can trigger this by sending an HTTP request with a `Cache-Control` header containing a long run of whitespace, causing the PHP regex engine to exhaust its backtracking limit and crash the request handler.\n\n## Details\n\nDenial of Service (DoS) describes a family of attacks, all aimed at making a system inaccessible to its original and legitimate users. There are many types of DoS attacks, ranging from trying to clog the network pipes to the system by generating a large volume of traffic from many machines (a Distributed Denial of Service - DDoS - attack) to sending crafted requests that cause a system to crash or take a disproportional amount of time to process.\n\nThe Regular expression Denial of Service (ReDoS) is a type of Denial of Service attack. Regular expressions are incredibly powerful, but they aren't very intuitive and can ultimately end up making it easy for attackers to take your site down.\n\nLet’s take the following regular expression as an example:\n```js\nregex = /A(B|C+)+D/\n```\n\nThis regular expression accomplishes the following:\n- `A` The string must start with the letter 'A'\n- `(B|C+)+` The string must then follow the letter A with either the letter 'B' or some number of occurrences of the letter 'C' (the `+` matches one or more times). The `+` at the end of this section states that we can look for one or more matches of this section.\n- `D` Finally, we ensure this section of the string ends with a 'D'\n\nThe expression would match inputs such as `ABBD`, `ABCCCCD`, `ABCBCCCD` and `ACCCCCD`\n\nIt most cases, it doesn't take very long for a regex engine to find a match:\n\n```bash\n$ time node -e '/A(B|C+)+D/.test(\"ACCCCCCCCCCCCCCCCCCCCCCCCCCCCD\")'\n0.04s user 0.01s system 95% cpu 0.052 total\n\n$ time node -e '/A(B|C+)+D/.test(\"ACCCCCCCCCCCCCCCCCCCCCCCCCCCCX\")'\n1.79s user 0.02s system 99% cpu 1.812 total\n```\n\nThe entire process of testing it against a 30 characters long string takes around ~52ms. But when given an invalid string, it takes nearly two seconds to complete the test, over ten times as long as it took to test a valid string. The dramatic difference is due to the way regular expressions get evaluated.\n\nMost Regex engines will work very similarly (with minor differences). The engine will match the first possible way to accept the current character and proceed to the next one. If it then fails to match the next one, it will backtrack and see if there was another way to digest the previous character. If it goes too far down the rabbit hole only to find out the string doesn’t match in the end, and if many characters have multiple valid regex paths, the number of backtracking steps can become very large, resulting in what is known as _catastrophic backtracking_.\n\nLet's look at how our expression runs into this problem, using a shorter string: \"ACCCX\". While it seems fairly straightforward, there are still four different ways that the engine could match those three C's:\n1. CCC\n2. CC+C\n3. C+CC\n4. C+C+C.\n\nThe engine has to try each of those combinations to see if any of them potentially match against the expression. When you combine that with the other steps the engine must take, we can use [RegEx 101 debugger](https://regex101.com/debugger) to see the engine has to take a total of 38 steps before it can determine the string doesn't match.\n\nFrom there, the number of steps the engine must use to validate a string just continues to grow.\n\n| String | Number of C's | Number of steps |\n| -------|-------------:| -----:|\n| ACCCX | 3 | 38\n| ACCCCX | 4 | 71\n| ACCCCCX | 5 | 136\n| ACCCCCCCCCCCCCCX | 14 | 65,553\n\n\nBy the time the string includes 14 C's, the engine has to take over 65,000 steps just to see if the string is valid. These extreme situations can cause them to work very slowly (exponentially related to input size, as shown above), allowing an attacker to exploit this and can cause the service to excessively consume CPU, resulting in a Denial of Service.\n\n## Remediation\nUpgrade `symfony/http-foundation` to version 5.4.54, 6.4.46, 7.4.19, 8.1.7 or higher.\n## References\n- [GitHub Advisory](https://github.com/symfony/symfony/security/advisories/GHSA-r925-mgvr-h9cc)\n- [GitHub PR](https://github.com/symfony/symfony/pull/66048)\n- [GitHub PR](https://github.com/symfony/symfony/pull/66491)\n- [Symfony Blog](https://symfony.com/blog/cve-2026-108082-redos-in-headerutils-split-reachable-through-the-cache-control-request-header)\n",
+        "epssDetails": {
+          "percentile": "0.41142",
+          "probability": "0.00480",
+          "modelVersion": "v2026.06.15"
+        },
+        "identifiers": {
+          "CVE": [
+            "CVE-2026-108082"
+          ],
+          "CWE": [
+            "CWE-1333"
+          ],
+          "GHSA": [
+            "GHSA-r925-mgvr-h9cc"
+          ]
+        },
+        "packageName": "symfony/http-foundation",
+        "proprietary": false,
+        "creationTime": "2026-10-18T14:40:30.285659Z",
+        "functions_new": [],
+        "alternativeIds": [],
+        "disclosureTime": "2026-10-15T18:00:09.352000Z",
+        "exploitDetails": {
+          "sources": [],
+          "maturityLevels": [
+            {
+              "type": "secondary",
+              "level": "Not Defined",
+              "format": "CVSSv3"
+            },
+            {
+              "type": "primary",
+              "level": "Not Defined",
+              "format": "CVSSv4"
+            }
+          ]
+        },
+        "packageManager": "composer",
+        "publicationTime": "2026-10-18T14:40:30.445710Z",
+        "severityBasedOn": "CVSS",
+        "modificationTime": "2026-10-25T14:05:46.091237Z",
+        "socialTrendAlert": false,
+        "severityWithCritical": "high",
+        "from": [
+          "laravel/react-starter-kit@0.0.0",
+          "inertiajs/inertia-laravel@3.3.3",
+          "laravel/framework@13.31.0",
+          "symfony/http-kernel@8.1.6",
+          "symfony/http-foundation@8.1.6"
+        ],
+        "upgradePath": [],
+        "isUpgradable": false,
+        "isPatchable": false,
+        "name": "symfony/http-foundation",
+        "version": "8.1.6"
+      }
+    ],
+    "ok": false,
+    "dependencyCount": 154,
+    "org": "josejulianamadogarcia10-lab",
+    "policy": "# Snyk (https://snyk.io) policy file, patches or ignores known vulnerabilities.\nversion: v1.25.1\nignore: {}\npatch: {}\n",
+    "isPrivate": true,
+    "licensesPolicy": {
+      "severities": {},
+      "orgLicenseRules": {
+        "AGPL-1.0": {
+          "licenseType": "AGPL-1.0",
+          "severity": "high",
+          "instructions": ""
+        },
+        "AGPL-3.0": {
+          "licenseType": "AGPL-3.0",
+          "severity": "high",
+          "instructions": ""
+        },
+        "Artistic-1.0": {
+          "licenseType": "Artistic-1.0",
+          "severity": "medium",
+          "instructions": ""
+        },
+        "Artistic-2.0": {
+          "licenseType": "Artistic-2.0",
+          "severity": "medium",
+          "instructions": ""
+        },
+        "CDDL-1.0": {
+          "licenseType": "CDDL-1.0",
+          "severity": "medium",
+          "instructions": ""
+        },
+        "CPOL-1.02": {
+          "licenseType": "CPOL-1.02",
+          "severity": "high",
+          "instructions": ""
+        },
+        "EPL-1.0": {
+          "licenseType": "EPL-1.0",
+          "severity": "medium",
+          "instructions": ""
+        },
+        "GPL-2.0": {
+          "licenseType": "GPL-2.0",
+          "severity": "high",
+          "instructions": ""
+        },
+        "GPL-3.0": {
+          "licenseType": "GPL-3.0",
+          "severity": "high",
+          "instructions": ""
+        },
+        "LGPL-2.0": {
+          "licenseType": "LGPL-2.0",
+          "severity": "medium",
+          "instructions": ""
+        },
+        "LGPL-2.1": {
+          "licenseType": "LGPL-2.1",
+          "severity": "medium",
+          "instructions": ""
+        },
+        "LGPL-3.0": {
+          "licenseType": "LGPL-3.0",
+          "severity": "medium",
+          "instructions": ""
+        },
+        "MPL-1.1": {
+          "licenseType": "MPL-1.1",
+          "severity": "medium",
+          "instructions": ""
+        },
+        "MPL-2.0": {
+          "licenseType": "MPL-2.0",
+          "severity": "medium",
+          "instructions": ""
+        },
+        "MS-RL": {
+          "licenseType": "MS-RL",
+          "severity": "medium",
+          "instructions": ""
+        },
+        "SimPL-2.0": {
+          "licenseType": "SimPL-2.0",
+          "severity": "high",
+          "instructions": ""
+        }
+      }
+    },
+    "packageManager": "composer",
+    "ignoreSettings": {
+      "adminOnly": false,
+      "reasonRequired": false,
+      "disregardFilesystemIgnores": false,
+      "autoApproveIgnores": false,
+      "approvalWorkflowEnabled": false
+    },
+    "summary": "10 vulnerable dependency paths",
+    "filesystemPolicy": false,
+    "filtered": {
+      "ignore": [],
+      "patch": []
+    },
+    "uniqueCount": 3,
+    "targetFile": "composer.lock",
+    "projectName": "laravel/react-starter-kit",
+    "foundProjectCount": 5,
+    "displayTargetFile": "composer.lock",
+    "hasUnknownVersions": false,
+    "path": "C:\\Users\\josej\\Desktop\\Universidad_Docs\\PROYECTO DE GRADUACIÓN\\github-forja/react-starter-kit"
+  },
+  {
+    "vulnerabilities": [
+      {
+        "id": "SNYK-JS-SHELLQUOTE-20250993",
+        "title": "Command Injection",
+        "CVSSv3": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:H/A:H/E:P",
+        "credit": [
+          "Eurico Nicacio",
+          "Jordan Harband"
+        ],
+        "semver": {
+          "vulnerable": [
+            ">=1.8.4 <1.11.0"
+          ]
+        },
+        "exploit": "Proof of Concept",
+        "fixedIn": [
+          "1.11.0"
+        ],
+        "patches": [],
+        "insights": {
+          "triageAdvice": null
+        },
+        "language": "js",
+        "severity": "critical",
+        "cvssScore": 9.2,
+        "functions": [],
+        "malicious": false,
+        "isDisputed": false,
+        "moduleName": "shell-quote",
+        "references": [
+          {
+            "url": "https://github.com/ljharb/shell-quote/commit/6002b2ed90c6b83095eb272b6b0adaf3a172b0bc",
+            "title": "GitHub Commit"
+          },
+          {
+            "url": "https://github.com/ljharb/shell-quote/security/advisories/GHSA-pqg4-j6r4-53mv",
+            "title": "Maintainer's Advisory"
+          }
+        ],
+        "cvssDetails": [
+          {
+            "assigner": "Red Hat",
+            "severity": "high",
+            "cvssV3Vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:H/A:H",
+            "cvssV3BaseScore": 8.1,
+            "modificationTime": "2026-10-10T07:52:39.408810Z"
+          }
+        ],
+        "cvssSources": [
+          {
+            "type": "primary",
+            "vector": "CVSS:4.0/AV:N/AC:L/AT:P/PR:N/UI:N/VC:H/VI:H/VA:H/SC:N/SI:N/SA:N/E:P",
+            "assigner": "Snyk",
+            "severity": "critical",
+            "baseScore": 9.2,
+            "cvssVersion": "4.0",
+            "modificationTime": "2026-10-25T14:10:31.568046Z"
+          },
+          {
+            "type": "secondary",
+            "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:H/A:H/E:P",
+            "assigner": "Snyk",
+            "severity": "high",
+            "baseScore": 8.1,
+            "cvssVersion": "3.1",
+            "modificationTime": "2026-10-25T14:10:31.568046Z"
+          },
+          {
+            "type": "secondary",
+            "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:H/A:H",
+            "assigner": "Red Hat",
+            "severity": "high",
+            "baseScore": 8.1,
+            "cvssVersion": "3.1",
+            "modificationTime": "2026-10-10T07:52:39.408810Z"
+          }
+        ],
+        "description": "## Overview\n[shell-quote](https://www.npmjs.com/package/shell-quote) is a package used to quote and parse shell commands.\n\nAffected versions of this package are vulnerable to Command Injection via the `quote` function when a `{ comment }` token is followed by a string token containing a line terminator. A `{ comment }` token emits a `#`-prefixed string that comments out the rest of the shell line, including the opening quote of any subsequent string token. A line terminator inside that subsequent string ends the comment, causing the remainder of the string to be interpreted as shell input - for example, `quote(['echo', { comment: 'x' }, 'a\\nid;#'])` executes `id` in sh, bash, zsh, ksh, and dash. Because `parse` emits a comment token for a mid-word `#` (such as in a URL fragment), appending tokens to `parse` output is sufficient to reach the vulnerable code path.\n## Remediation\nUpgrade `shell-quote` to version 1.11.0 or higher.\n## References\n- [GitHub Commit](https://github.com/ljharb/shell-quote/commit/6002b2ed90c6b83095eb272b6b0adaf3a172b0bc)\n- [Maintainer's Advisory](https://github.com/ljharb/shell-quote/security/advisories/GHSA-pqg4-j6r4-53mv)\n",
+        "epssDetails": {
+          "percentile": "0.31469",
+          "probability": "0.00378",
+          "modelVersion": "v2026.06.15"
+        },
+        "identifiers": {
+          "CVE": [
+            "CVE-2026-102422"
+          ],
+          "CWE": [
+            "CWE-78"
+          ],
+          "GHSA": [
+            "GHSA-pqg4-j6r4-53mv"
+          ]
+        },
+        "packageName": "shell-quote",
+        "proprietary": false,
+        "creationTime": "2026-09-29T10:50:59.710819Z",
+        "functions_new": [],
+        "alternativeIds": [],
+        "disclosureTime": "2026-09-29T05:21:38Z",
+        "exploitDetails": {
+          "sources": [
+            "Snyk"
+          ],
+          "maturityLevels": [
+            {
+              "type": "secondary",
+              "level": "Proof of Concept",
+              "format": "CVSSv3"
+            },
+            {
+              "type": "primary",
+              "level": "Proof of Concept",
+              "format": "CVSSv4"
+            }
+          ]
+        },
+        "packageManager": "npm",
+        "publicationTime": "2026-09-29T10:50:59.876491Z",
+        "severityBasedOn": "CVSS",
+        "modificationTime": "2026-10-25T14:10:31.568046Z",
+        "socialTrendAlert": false,
+        "severityWithCritical": "critical",
+        "from": [
+          "package.json@*",
+          "concurrently@10.0.5",
+          "shell-quote@1.9.0"
+        ],
+        "upgradePath": [
+          false,
+          "concurrently@10.0.6",
+          "shell-quote@1.12.0"
+        ],
+        "isUpgradable": true,
+        "isPatchable": false,
+        "name": "shell-quote",
+        "version": "1.9.0"
+      },
+      {
+        "id": "SNYK-JS-VITE-21282012",
+        "title": "Arbitrary Argument Injection",
+        "CVSSv3": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:L/I:L/A:L",
+        "credit": [
+          "0xazanul"
+        ],
+        "semver": {
+          "vulnerable": [
+            "<6.4.4",
+            ">=7.0.0 <7.3.7",
+            ">=8.0.0 <8.1.6",
+            ">=8.2.0 <8.2.4",
+            ">=8.3.0 <8.3.3"
+          ]
+        },
+        "exploit": "Not Defined",
+        "fixedIn": [
+          "6.4.4",
+          "7.3.7",
+          "8.1.6",
+          "8.2.4",
+          "8.3.3"
+        ],
+        "patches": [],
+        "insights": {
+          "triageAdvice": null
+        },
+        "language": "js",
+        "severity": "medium",
+        "cvssScore": 6.3,
+        "functions": [],
+        "malicious": false,
+        "isDisputed": false,
+        "moduleName": "vite",
+        "references": [
+          {
+            "url": "https://github.com/vitejs/launch-editor/security/advisories/GHSA-r825-w8mm-5pxw",
+            "title": "GitHub Advisory"
+          },
+          {
+            "url": "https://github.com/vitejs/launch-editor/commit/f6e6701bb1f16f2dd242b321374f1b6cca6eb6d4",
+            "title": "GitHub Commit"
+          },
+          {
+            "url": "https://github.com/vitejs/launch-editor/pull/156",
+            "title": "GitHub PR"
+          },
+          {
+            "url": "https://github.com/vitejs/launch-editor/releases/tag/v2.14.2",
+            "title": "GitHub Release"
+          }
+        ],
+        "cvssDetails": [
+          {
+            "assigner": "Red Hat",
+            "severity": "medium",
+            "cvssV3Vector": "CVSS:3.1/AV:L/AC:H/PR:L/UI:R/S:U/C:H/I:H/A:H",
+            "cvssV3BaseScore": 6.7,
+            "modificationTime": "2026-10-21T07:28:42.132069Z"
+          }
+        ],
+        "cvssSources": [
+          {
+            "type": "primary",
+            "vector": "CVSS:4.0/AV:N/AC:L/AT:P/PR:N/UI:N/VC:L/VI:L/VA:L/SC:N/SI:N/SA:N",
+            "assigner": "Snyk",
+            "severity": "medium",
+            "baseScore": 6.3,
+            "cvssVersion": "4.0",
+            "modificationTime": "2026-10-24T10:05:03.540612Z"
+          },
+          {
+            "type": "secondary",
+            "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:L/I:L/A:L",
+            "assigner": "Snyk",
+            "severity": "medium",
+            "baseScore": 5.6,
+            "cvssVersion": "3.1",
+            "modificationTime": "2026-10-24T10:05:03.540612Z"
+          },
+          {
+            "type": "secondary",
+            "vector": "CVSS:3.1/AV:L/AC:H/PR:L/UI:R/S:U/C:H/I:H/A:H",
+            "assigner": "Red Hat",
+            "severity": "medium",
+            "baseScore": 6.7,
+            "cvssVersion": "3.1",
+            "modificationTime": "2026-10-21T07:28:42.132069Z"
+          }
+        ],
+        "description": "## Overview\n[vite](https://www.npmjs.org/package/vite) is a Native-ESM powered web dev build tool\n\nAffected versions of this package are vulnerable to Arbitrary Argument Injection via the `getArgumentsForFile` function in `packages/launch-editor/get-args.js`, where a filename is passed directly to an editor process without being resolved to an absolute path first. An attacker who can control the filename argument can supply a value beginning with a hyphen or flag-like prefix, causing it to be interpreted as a command-line flag by the spawned editor process rather than as a file path.\r\n\r\n**Note:** This is only exploitable on WSL (Windows Subsystem for Linux) environments where Vite 2.0.0+ is used with `launch-editor-middleware` v2.2.0+, and the impact on Notepad++ is limited to configurations using a plugin that exposes dangerous operations via plugin messages.\n## Remediation\nUpgrade `vite` to version 6.4.4, 7.3.7, 8.1.6, 8.2.4, 8.3.3 or higher.\n## References\n- [GitHub Advisory](https://github.com/vitejs/launch-editor/security/advisories/GHSA-r825-w8mm-5pxw)\n- [GitHub Commit](https://github.com/vitejs/launch-editor/commit/f6e6701bb1f16f2dd242b321374f1b6cca6eb6d4)\n- [GitHub PR](https://github.com/vitejs/launch-editor/pull/156)\n- [GitHub Release](https://github.com/vitejs/launch-editor/releases/tag/v2.14.2)\n",
+        "epssDetails": {
+          "percentile": "0.52759",
+          "probability": "0.00705",
+          "modelVersion": "v2026.06.15"
+        },
+        "identifiers": {
+          "CVE": [
+            "CVE-2026-112944"
+          ],
+          "CWE": [
+            "CWE-88"
+          ],
+          "GHSA": [
+            "GHSA-r825-w8mm-5pxw"
+          ]
+        },
+        "packageName": "vite",
+        "proprietary": false,
+        "creationTime": "2026-10-21T06:35:04.112968Z",
+        "functions_new": [],
+        "alternativeIds": [],
+        "disclosureTime": "2026-10-20T19:51:52Z",
+        "exploitDetails": {
+          "sources": [],
+          "maturityLevels": [
+            {
+              "type": "secondary",
+              "level": "Not Defined",
+              "format": "CVSSv3"
+            },
+            {
+              "type": "primary",
+              "level": "Not Defined",
+              "format": "CVSSv4"
+            }
+          ]
+        },
+        "packageManager": "npm",
+        "publicationTime": "2026-10-21T06:35:04.280280Z",
+        "severityBasedOn": "CVSS",
+        "modificationTime": "2026-10-24T10:05:03.540612Z",
+        "socialTrendAlert": false,
+        "severityWithCritical": "medium",
+        "from": [
+          "package.json@*",
+          "vite@8.2.2"
+        ],
+        "upgradePath": [
+          false,
+          "vite@8.2.4"
+        ],
+        "isUpgradable": true,
+        "isPatchable": false,
+        "name": "vite",
+        "version": "8.2.2"
+      },
+      {
+        "id": "SNYK-JS-VITE-21282024",
+        "title": "Arbitrary Command Injection",
+        "CVSSv3": "CVSS:3.1/AV:N/AC:H/PR:N/UI:R/S:U/C:H/I:H/A:H",
+        "credit": [
+          "hutsbotnet"
+        ],
+        "semver": {
+          "vulnerable": [
+            "<6.4.4",
+            ">=7.0.0 <7.3.7",
+            ">=8.0.0 <8.1.6",
+            ">=8.2.0 <8.2.4",
+            ">=8.3.0 <8.3.3"
+          ]
+        },
+        "exploit": "Not Defined",
+        "fixedIn": [
+          "6.4.4",
+          "7.3.7",
+          "8.1.6",
+          "8.2.4",
+          "8.3.3"
+        ],
+        "patches": [],
+        "insights": {
+          "triageAdvice": null
+        },
+        "language": "js",
+        "severity": "high",
+        "cvssScore": 7.5,
+        "functions": [],
+        "malicious": false,
+        "isDisputed": false,
+        "moduleName": "vite",
+        "references": [
+          {
+            "url": "https://github.com/vitejs/launch-editor/security/advisories/GHSA-587h-7wmj-h5pm",
+            "title": "GitHub Advisory"
+          },
+          {
+            "url": "https://github.com/vitejs/launch-editor/commit/f13cd835d4b8e860b1d4d080ad8a490cc2463679",
+            "title": "GitHub Commit"
+          },
+          {
+            "url": "https://github.com/vitejs/launch-editor/releases/tag/v2.14.2",
+            "title": "GitHub Release"
+          }
+        ],
+        "cvssDetails": [
+          {
+            "assigner": "Red Hat",
+            "severity": "high",
+            "cvssV3Vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:H",
+            "cvssV3BaseScore": 8.8,
+            "modificationTime": "2026-10-21T07:29:05.053319Z"
+          }
+        ],
+        "cvssSources": [
+          {
+            "type": "primary",
+            "vector": "CVSS:4.0/AV:N/AC:L/AT:P/PR:N/UI:A/VC:H/VI:H/VA:H/SC:N/SI:N/SA:N",
+            "assigner": "Snyk",
+            "severity": "high",
+            "baseScore": 7.5,
+            "cvssVersion": "4.0",
+            "modificationTime": "2026-10-25T14:07:10.537055Z"
+          },
+          {
+            "type": "secondary",
+            "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:R/S:U/C:H/I:H/A:H",
+            "assigner": "Snyk",
+            "severity": "high",
+            "baseScore": 7.5,
+            "cvssVersion": "3.1",
+            "modificationTime": "2026-10-25T14:07:10.537055Z"
+          },
+          {
+            "type": "secondary",
+            "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:H",
+            "assigner": "Red Hat",
+            "severity": "high",
+            "baseScore": 8.8,
+            "cvssVersion": "3.1",
+            "modificationTime": "2026-10-21T07:29:05.053319Z"
+          }
+        ],
+        "description": "## Overview\n[vite](https://www.npmjs.org/package/vite) is a Native-ESM powered web dev build tool\n\nAffected versions of this package are vulnerable to Arbitrary Command Injection via the `parseFile` function in `packages/launch-editor/index.js`, which previously resolved file paths only after stripping position suffixes without calling `path.resolve` before security checks. An attacker who can influence the file argument passed to `launchEditor` can supply a path that bypasses the UNC path check on Windows (which compared the raw, unresolved string against `\\\\\\\\`) and cause the editor to open an arbitrary file on the host system, achieving unauthorized read and write access to sensitive files.\n## Remediation\nUpgrade `vite` to version 6.4.4, 7.3.7, 8.1.6, 8.2.4, 8.3.3 or higher.\n## References\n- [GitHub Advisory](https://github.com/vitejs/launch-editor/security/advisories/GHSA-587h-7wmj-h5pm)\n- [GitHub Commit](https://github.com/vitejs/launch-editor/commit/f13cd835d4b8e860b1d4d080ad8a490cc2463679)\n- [GitHub Release](https://github.com/vitejs/launch-editor/releases/tag/v2.14.2)\n",
+        "epssDetails": {
+          "percentile": "0.71192",
+          "probability": "0.01344",
+          "modelVersion": "v2026.06.15"
+        },
+        "identifiers": {
+          "CVE": [
+            "CVE-2026-112942"
+          ],
+          "CWE": [
+            "CWE-77"
+          ],
+          "GHSA": [
+            "GHSA-587h-7wmj-h5pm"
+          ]
+        },
+        "packageName": "vite",
+        "proprietary": false,
+        "creationTime": "2026-10-21T06:35:59.010717Z",
+        "functions_new": [],
+        "alternativeIds": [],
+        "disclosureTime": "2026-10-20T19:48:25Z",
+        "exploitDetails": {
+          "sources": [],
+          "maturityLevels": [
+            {
+              "type": "secondary",
+              "level": "Not Defined",
+              "format": "CVSSv3"
+            },
+            {
+              "type": "primary",
+              "level": "Not Defined",
+              "format": "CVSSv4"
+            }
+          ]
+        },
+        "packageManager": "npm",
+        "publicationTime": "2026-10-21T06:35:59.166838Z",
+        "severityBasedOn": "CVSS",
+        "modificationTime": "2026-10-25T14:07:10.537055Z",
+        "socialTrendAlert": false,
+        "severityWithCritical": "high",
+        "from": [
+          "package.json@*",
+          "vite@8.2.2"
+        ],
+        "upgradePath": [
+          false,
+          "vite@8.2.4"
+        ],
+        "isUpgradable": true,
+        "isPatchable": false,
+        "name": "vite",
+        "version": "8.2.2"
+      },
+      {
+        "id": "SNYK-JS-VITE-21282030",
+        "title": "Command Injection",
+        "CVSSv3": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:L/I:L/A:L",
+        "credit": [
+          "iaohkut-from-NightWolf-Team",
+          "Charles Vosburgh",
+          "Rikuxx0"
+        ],
+        "semver": {
+          "vulnerable": [
+            "<6.4.4",
+            ">=7.0.0 <7.3.7",
+            ">=8.0.0 <8.1.6",
+            ">=8.2.0 <8.2.4",
+            ">=8.3.0 <8.3.3"
+          ]
+        },
+        "exploit": "Not Defined",
+        "fixedIn": [
+          "6.4.4",
+          "7.3.7",
+          "8.1.6",
+          "8.2.4",
+          "8.3.3"
+        ],
+        "patches": [],
+        "insights": {
+          "triageAdvice": null
+        },
+        "language": "js",
+        "severity": "medium",
+        "cvssScore": 6.3,
+        "functions": [],
+        "malicious": false,
+        "isDisputed": false,
+        "moduleName": "vite",
+        "references": [
+          {
+            "url": "https://github.com/vitejs/launch-editor/security/advisories/GHSA-698v-4r3x-3vcv",
+            "title": "GitHub Advisory"
+          },
+          {
+            "url": "https://github.com/vitejs/launch-editor/commit/3c2f9bf2ff8fe63d056a8f9cc52d825b66ca79fc",
+            "title": "GitHub Commit"
+          },
+          {
+            "url": "https://github.com/vitejs/launch-editor/pull/155",
+            "title": "GitHub PR"
+          },
+          {
+            "url": "https://github.com/vitejs/launch-editor/releases/tag/v2.14.2",
+            "title": "GitHub Release"
+          }
+        ],
+        "cvssDetails": [
+          {
+            "assigner": "Red Hat",
+            "severity": "high",
+            "cvssV3Vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:H/A:H",
+            "cvssV3BaseScore": 8.1,
+            "modificationTime": "2026-10-21T07:29:14.923827Z"
+          }
+        ],
+        "cvssSources": [
+          {
+            "type": "primary",
+            "vector": "CVSS:4.0/AV:N/AC:L/AT:P/PR:N/UI:N/VC:L/VI:L/VA:L/SC:N/SI:N/SA:N",
+            "assigner": "Snyk",
+            "severity": "medium",
+            "baseScore": 6.3,
+            "cvssVersion": "4.0",
+            "modificationTime": "2026-10-24T10:04:45.202493Z"
+          },
+          {
+            "type": "secondary",
+            "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:L/I:L/A:L",
+            "assigner": "Snyk",
+            "severity": "medium",
+            "baseScore": 5.6,
+            "cvssVersion": "3.1",
+            "modificationTime": "2026-10-24T10:04:45.202493Z"
+          },
+          {
+            "type": "secondary",
+            "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:H/A:H",
+            "assigner": "Red Hat",
+            "severity": "high",
+            "baseScore": 8.1,
+            "cvssVersion": "3.1",
+            "modificationTime": "2026-10-21T07:29:14.923827Z"
+          }
+        ],
+        "description": "## Overview\n[vite](https://www.npmjs.org/package/vite) is a Native-ESM powered web dev build tool\n\nAffected versions of this package are vulnerable to Command Injection via `constructWindowsLaunchCommand` in `packages/launch-editor/construct-windows-launch-command.js`, where file path arguments containing `%` characters are passed unsanitized to `childProcess.exec` on Windows. CMD expands percent-delimited expressions such as `%VAR:old=new%` before consuming caret escapes, allowing an attacker who controls the file path argument to inject arbitrary OS commands through environment variable expansion. Arguments containing line breaks are similarly not rejected, as CMD treats line breaks as command separators.\r\n\r\n**Note:** This is only exploitable on Windows platforms.\n## Remediation\nUpgrade `vite` to version 6.4.4, 7.3.7, 8.1.6, 8.2.4, 8.3.3 or higher.\n## References\n- [GitHub Advisory](https://github.com/vitejs/launch-editor/security/advisories/GHSA-698v-4r3x-3vcv)\n- [GitHub Commit](https://github.com/vitejs/launch-editor/commit/3c2f9bf2ff8fe63d056a8f9cc52d825b66ca79fc)\n- [GitHub PR](https://github.com/vitejs/launch-editor/pull/155)\n- [GitHub Release](https://github.com/vitejs/launch-editor/releases/tag/v2.14.2)\n",
+        "epssDetails": {
+          "percentile": "0.34593",
+          "probability": "0.00414",
+          "modelVersion": "v2026.06.15"
+        },
+        "identifiers": {
+          "CVE": [
+            "CVE-2026-112943"
+          ],
+          "CWE": [
+            "CWE-78"
+          ],
+          "GHSA": [
+            "GHSA-698v-4r3x-3vcv"
+          ]
+        },
+        "packageName": "vite",
+        "proprietary": false,
+        "creationTime": "2026-10-21T06:36:42.824767Z",
+        "functions_new": [],
+        "alternativeIds": [],
+        "disclosureTime": "2026-10-20T18:30:24Z",
+        "exploitDetails": {
+          "sources": [],
+          "maturityLevels": [
+            {
+              "type": "secondary",
+              "level": "Not Defined",
+              "format": "CVSSv3"
+            },
+            {
+              "type": "primary",
+              "level": "Not Defined",
+              "format": "CVSSv4"
+            }
+          ]
+        },
+        "packageManager": "npm",
+        "publicationTime": "2026-10-21T06:36:43.056497Z",
+        "severityBasedOn": "CVSS",
+        "modificationTime": "2026-10-24T10:04:45.202493Z",
+        "socialTrendAlert": false,
+        "severityWithCritical": "medium",
+        "from": [
+          "package.json@*",
+          "vite@8.2.2"
+        ],
+        "upgradePath": [
+          false,
+          "vite@8.2.4"
+        ],
+        "isUpgradable": true,
+        "isPatchable": false,
+        "name": "vite",
+        "version": "8.2.2"
+      },
+      {
+        "id": "SNYK-JS-VITE-21282039",
+        "title": "Directory Traversal",
+        "CVSSv3": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:L/I:N/A:N/E:P",
+        "credit": [
+          "Unknown"
+        ],
+        "semver": {
+          "vulnerable": [
+            ">=8.3.0 <8.3.3",
+            ">=8.2.0 <8.2.4",
+            ">=8.0.0 <8.1.6",
+            ">=7.0.0 <7.3.7",
+            "<6.4.4"
+          ]
+        },
+        "exploit": "Proof of Concept",
+        "fixedIn": [
+          "8.3.3",
+          "8.2.4",
+          "8.1.6",
+          "7.3.7",
+          "6.4.4"
+        ],
+        "patches": [],
+        "insights": {
+          "triageAdvice": null
+        },
+        "language": "js",
+        "severity": "medium",
+        "cvssScore": 6.3,
+        "functions": [],
+        "malicious": false,
+        "isDisputed": false,
+        "moduleName": "vite",
+        "references": [
+          {
+            "url": "https://github.com/vitejs/vite/security/advisories/GHSA-rq7h-c2jc-7f22",
+            "title": "GitHub Advisory"
+          },
+          {
+            "url": "https://github.com/vitejs/vite/commit/170b92791421bcd484f7325936d989a82d6bd4aa",
+            "title": "GitHub Commit"
+          },
+          {
+            "url": "https://github.com/vitejs/vite/commit/45c0e3392a298626955a0ab93a8e51232daac721",
+            "title": "GitHub Commit"
+          },
+          {
+            "url": "https://github.com/vitejs/vite/commit/c3e06f92e969952466b4e2f5801e85e1e00cd905",
+            "title": "GitHub Commit"
+          },
+          {
+            "url": "https://github.com/vitejs/vite/commit/e570d8d016096b5f8f6f09808376ca6cf73f27d0",
+            "title": "GitHub Commit"
+          },
+          {
+            "url": "https://github.com/vitejs/vite/commit/f0d76c7da13d5e794807b82f0b86c1931a8438e3",
+            "title": "GitHub Commit"
+          },
+          {
+            "url": "https://github.com/vitejs/vite/pull/23656",
+            "title": "GitHub PR"
+          }
+        ],
+        "cvssDetails": [
+          {
+            "assigner": "Red Hat",
+            "severity": "low",
+            "cvssV3Vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:L/I:N/A:N",
+            "cvssV3BaseScore": 3.7,
+            "modificationTime": "2026-10-21T07:29:49.716565Z"
+          }
+        ],
+        "cvssSources": [
+          {
+            "type": "primary",
+            "vector": "CVSS:4.0/AV:N/AC:L/AT:P/PR:N/UI:N/VC:L/VI:N/VA:N/SC:N/SI:N/SA:N/E:P",
+            "assigner": "Snyk",
+            "severity": "medium",
+            "baseScore": 6.3,
+            "cvssVersion": "4.0",
+            "modificationTime": "2026-10-25T14:07:10.567431Z"
+          },
+          {
+            "type": "secondary",
+            "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:L/I:N/A:N/E:P",
+            "assigner": "Snyk",
+            "severity": "low",
+            "baseScore": 3.7,
+            "cvssVersion": "3.1",
+            "modificationTime": "2026-10-25T14:07:10.567431Z"
+          },
+          {
+            "type": "secondary",
+            "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:L/I:N/A:N",
+            "assigner": "Red Hat",
+            "severity": "low",
+            "baseScore": 3.7,
+            "cvssVersion": "3.1",
+            "modificationTime": "2026-10-21T07:29:49.716565Z"
+          }
+        ],
+        "description": "## Overview\n[vite](https://www.npmjs.org/package/vite) is a Native-ESM powered web dev build tool\n\nAffected versions of this package are vulnerable to Directory Traversal via the `importAnalysisPlugin` in `packages/vite/src/node/plugins/importAnalysis.ts`, where resolved module IDs are registered into `safeModulePaths` using the URL form (via `fsPathFromUrl(stripBase(url, base))`) rather than the cleaned filesystem path. A Vite plugin can return a `resolveId` result whose path, when processed through URL-to-path conversion, maps to a file outside the intended safe module set, causing that file to be incorrectly marked as safe and subsequently served via the `@fs` endpoint to any network requester. This allows an attacker to read files that should be blocked by the filesystem access restrictions.\n\n## Details\n\nA Directory Traversal attack (also known as path traversal) aims to access files and directories that are stored outside the intended folder. By manipulating files with \"dot-dot-slash (../)\" sequences and its variations, or by using absolute file paths, it may be possible to access arbitrary files and directories stored on file system, including application source code, configuration, and other critical system files.\n\nDirectory Traversal vulnerabilities can be generally divided into two types:\n\n- **Information Disclosure**: Allows the attacker to gain information about the folder structure or read the contents of sensitive files on the system.\n\n`st` is a module for serving static files on web pages, and contains a [vulnerability of this type](https://snyk.io/vuln/npm:st:20140206). In our example, we will serve files from the `public` route.\n\nIf an attacker requests the following URL from our server, it will in turn leak the sensitive private key of the root user.\n\n```\ncurl http://localhost:8080/public/%2e%2e/%2e%2e/%2e%2e/%2e%2e/%2e%2e/root/.ssh/id_rsa\n```\n**Note** `%2e` is the URL encoded version of `.` (dot).\n\n- **Writing arbitrary files**: Allows the attacker to create or replace existing files. This type of vulnerability is also known as `Zip-Slip`. \n\nOne way to achieve this is by using a malicious `zip` archive that holds path traversal filenames. When each filename in the zip archive gets concatenated to the target extraction folder, without validation, the final path ends up outside of the target folder. If an executable or a configuration file is overwritten with a file containing malicious code, the problem can turn into an arbitrary code execution issue quite easily.\n\nThe following is an example of a `zip` archive with one benign file and one malicious file. Extracting the malicious file will result in traversing out of the target folder, ending up in `/root/.ssh/` overwriting the `authorized_keys` file:\n\n```\n2018-04-15 22:04:29 .....           19           19  good.txt\n2018-04-15 22:04:42 .....           20           20  ../../../../../../root/.ssh/authorized_keys\n```\n\n## Remediation\nUpgrade `vite` to version 8.3.3, 8.2.4, 8.1.6, 7.3.7, 6.4.4 or higher.\n## References\n- [GitHub Advisory](https://github.com/vitejs/vite/security/advisories/GHSA-rq7h-c2jc-7f22)\n- [GitHub Commit](https://github.com/vitejs/vite/commit/170b92791421bcd484f7325936d989a82d6bd4aa)\n- [GitHub Commit](https://github.com/vitejs/vite/commit/45c0e3392a298626955a0ab93a8e51232daac721)\n- [GitHub Commit](https://github.com/vitejs/vite/commit/c3e06f92e969952466b4e2f5801e85e1e00cd905)\n- [GitHub Commit](https://github.com/vitejs/vite/commit/e570d8d016096b5f8f6f09808376ca6cf73f27d0)\n- [GitHub Commit](https://github.com/vitejs/vite/commit/f0d76c7da13d5e794807b82f0b86c1931a8438e3)\n- [GitHub PR](https://github.com/vitejs/vite/pull/23656)\n",
+        "epssDetails": {
+          "percentile": "0.57986",
+          "probability": "0.00852",
+          "modelVersion": "v2026.06.15"
+        },
+        "identifiers": {
+          "CVE": [
+            "CVE-2026-112946"
+          ],
+          "CWE": [
+            "CWE-22"
+          ],
+          "GHSA": [
+            "GHSA-rq7h-c2jc-7f22"
+          ]
+        },
+        "packageName": "vite",
+        "proprietary": false,
+        "creationTime": "2026-10-21T06:38:34.102114Z",
+        "functions_new": [],
+        "alternativeIds": [],
+        "disclosureTime": "2026-10-20T16:58:05Z",
+        "exploitDetails": {
+          "sources": [
+            "Snyk"
+          ],
+          "maturityLevels": [
+            {
+              "type": "secondary",
+              "level": "Proof of Concept",
+              "format": "CVSSv3"
+            },
+            {
+              "type": "primary",
+              "level": "Proof of Concept",
+              "format": "CVSSv4"
+            }
+          ]
+        },
+        "packageManager": "npm",
+        "publicationTime": "2026-10-21T06:38:34.275216Z",
+        "severityBasedOn": "CVSS",
+        "modificationTime": "2026-10-25T14:07:10.567431Z",
+        "socialTrendAlert": false,
+        "severityWithCritical": "medium",
+        "from": [
+          "package.json@*",
+          "vite@8.2.2"
+        ],
+        "upgradePath": [
+          false,
+          "vite@8.2.4"
+        ],
+        "isUpgradable": true,
+        "isPatchable": false,
+        "name": "vite",
+        "version": "8.2.2"
+      },
+      {
+        "id": "SNYK-JS-VITE-21282045",
+        "title": "Directory Traversal",
+        "CVSSv3": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:L/I:N/A:N/E:P",
+        "credit": [
+          "Elias Hasas"
+        ],
+        "semver": {
+          "vulnerable": [
+            ">=8.3.0 <8.3.3",
+            ">=8.2.0 <8.2.4"
+          ]
+        },
+        "exploit": "Proof of Concept",
+        "fixedIn": [
+          "8.3.3",
+          "8.2.4"
+        ],
+        "patches": [],
+        "insights": {
+          "triageAdvice": null
+        },
+        "language": "js",
+        "severity": "medium",
+        "cvssScore": 6.3,
+        "functions": [],
+        "malicious": false,
+        "isDisputed": false,
+        "moduleName": "vite",
+        "references": [
+          {
+            "url": "https://github.com/vitejs/vite/security/advisories/GHSA-vfpm-58rq-9qcg",
+            "title": "GitHub Advisory"
+          },
+          {
+            "url": "https://github.com/vitejs/vite/commit/b6c6d2fb3f853aab4092dc25f0d6816a96c23dff",
+            "title": "GitHub Commit"
+          },
+          {
+            "url": "https://github.com/vitejs/vite/commit/ba8b7ab43b4afa5d0292ab4b6e3a7b5033cc9c73",
+            "title": "GitHub Commit"
+          },
+          {
+            "url": "https://github.com/vitejs/vite/pull/23655",
+            "title": "GitHub PR"
+          }
+        ],
+        "cvssDetails": [
+          {
+            "assigner": "Red Hat",
+            "severity": "medium",
+            "cvssV3Vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:L/I:N/A:N",
+            "cvssV3BaseScore": 5.3,
+            "modificationTime": "2026-10-21T07:30:24.462998Z"
+          }
+        ],
+        "cvssSources": [
+          {
+            "type": "primary",
+            "vector": "CVSS:4.0/AV:N/AC:L/AT:P/PR:N/UI:N/VC:L/VI:N/VA:N/SC:N/SI:N/SA:N/E:P",
+            "assigner": "Snyk",
+            "severity": "medium",
+            "baseScore": 6.3,
+            "cvssVersion": "4.0",
+            "modificationTime": "2026-10-25T14:07:10.926272Z"
+          },
+          {
+            "type": "secondary",
+            "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:L/I:N/A:N/E:P",
+            "assigner": "Snyk",
+            "severity": "low",
+            "baseScore": 3.7,
+            "cvssVersion": "3.1",
+            "modificationTime": "2026-10-25T14:07:10.926272Z"
+          },
+          {
+            "type": "secondary",
+            "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:L/I:N/A:N",
+            "assigner": "Red Hat",
+            "severity": "medium",
+            "baseScore": 5.3,
+            "cvssVersion": "3.1",
+            "modificationTime": "2026-10-21T07:30:24.462998Z"
+          }
+        ],
+        "description": "## Overview\n[vite](https://www.npmjs.org/package/vite) is a Native-ESM powered web dev build tool\n\nAffected versions of this package are vulnerable to Directory Traversal via the `isServerAccessDeniedForTransform` function in `packages/vite/src/node/server/middlewares/transform.ts`, which fails to check the `?vite-wasm-instance` query parameter against the `fs.serve` allowlist. An attacker can append `?vite-wasm-instance` to a request URL to bypass filesystem access controls and read files outside the configured allowed directories, including sensitive files such as `.env`.\n\n## Details\n\nA Directory Traversal attack (also known as path traversal) aims to access files and directories that are stored outside the intended folder. By manipulating files with \"dot-dot-slash (../)\" sequences and its variations, or by using absolute file paths, it may be possible to access arbitrary files and directories stored on file system, including application source code, configuration, and other critical system files.\n\nDirectory Traversal vulnerabilities can be generally divided into two types:\n\n- **Information Disclosure**: Allows the attacker to gain information about the folder structure or read the contents of sensitive files on the system.\n\n`st` is a module for serving static files on web pages, and contains a [vulnerability of this type](https://snyk.io/vuln/npm:st:20140206). In our example, we will serve files from the `public` route.\n\nIf an attacker requests the following URL from our server, it will in turn leak the sensitive private key of the root user.\n\n```\ncurl http://localhost:8080/public/%2e%2e/%2e%2e/%2e%2e/%2e%2e/%2e%2e/root/.ssh/id_rsa\n```\n**Note** `%2e` is the URL encoded version of `.` (dot).\n\n- **Writing arbitrary files**: Allows the attacker to create or replace existing files. This type of vulnerability is also known as `Zip-Slip`. \n\nOne way to achieve this is by using a malicious `zip` archive that holds path traversal filenames. When each filename in the zip archive gets concatenated to the target extraction folder, without validation, the final path ends up outside of the target folder. If an executable or a configuration file is overwritten with a file containing malicious code, the problem can turn into an arbitrary code execution issue quite easily.\n\nThe following is an example of a `zip` archive with one benign file and one malicious file. Extracting the malicious file will result in traversing out of the target folder, ending up in `/root/.ssh/` overwriting the `authorized_keys` file:\n\n```\n2018-04-15 22:04:29 .....           19           19  good.txt\n2018-04-15 22:04:42 .....           20           20  ../../../../../../root/.ssh/authorized_keys\n```\n\n## Remediation\nUpgrade `vite` to version 8.3.3, 8.2.4 or higher.\n## References\n- [GitHub Advisory](https://github.com/vitejs/vite/security/advisories/GHSA-vfpm-58rq-9qcg)\n- [GitHub Commit](https://github.com/vitejs/vite/commit/b6c6d2fb3f853aab4092dc25f0d6816a96c23dff)\n- [GitHub Commit](https://github.com/vitejs/vite/commit/ba8b7ab43b4afa5d0292ab4b6e3a7b5033cc9c73)\n- [GitHub PR](https://github.com/vitejs/vite/pull/23655)\n",
+        "epssDetails": {
+          "percentile": "0.42676",
+          "probability": "0.00502",
+          "modelVersion": "v2026.06.15"
+        },
+        "identifiers": {
+          "CVE": [
+            "CVE-2026-112947"
+          ],
+          "CWE": [
+            "CWE-22"
+          ],
+          "GHSA": [
+            "GHSA-vfpm-58rq-9qcg"
+          ]
+        },
+        "packageName": "vite",
+        "proprietary": false,
+        "creationTime": "2026-10-21T06:38:58.158101Z",
+        "functions_new": [],
+        "alternativeIds": [],
+        "disclosureTime": "2026-10-20T16:57:59Z",
+        "exploitDetails": {
+          "sources": [
+            "Snyk"
+          ],
+          "maturityLevels": [
+            {
+              "type": "secondary",
+              "level": "Proof of Concept",
+              "format": "CVSSv3"
+            },
+            {
+              "type": "primary",
+              "level": "Proof of Concept",
+              "format": "CVSSv4"
+            }
+          ]
+        },
+        "packageManager": "npm",
+        "publicationTime": "2026-10-21T06:38:58.310770Z",
+        "severityBasedOn": "CVSS",
+        "modificationTime": "2026-10-25T14:07:10.926272Z",
+        "socialTrendAlert": false,
+        "severityWithCritical": "medium",
+        "from": [
+          "package.json@*",
+          "vite@8.2.2"
+        ],
+        "upgradePath": [
+          false,
+          "vite@8.2.4"
+        ],
+        "isUpgradable": true,
+        "isPatchable": false,
+        "name": "vite",
+        "version": "8.2.2"
+      },
+      {
+        "id": "SNYK-JS-VITE-21282049",
+        "title": "Cross-site Scripting (XSS)",
+        "CVSSv3": "CVSS:3.1/AV:N/AC:H/PR:N/UI:R/S:U/C:L/I:L/A:N/E:P",
+        "credit": [
+          "deevashwer"
+        ],
+        "semver": {
+          "vulnerable": [
+            ">=8.3.0 <8.3.3",
+            ">=8.2.0 <8.2.4",
+            ">=8.0.0 <8.1.6",
+            ">=7.0.0 <7.3.7",
+            "<6.4.4"
+          ]
+        },
+        "exploit": "Proof of Concept",
+        "fixedIn": [
+          "8.3.3",
+          "8.2.4",
+          "8.1.6",
+          "7.3.7",
+          "6.4.4"
+        ],
+        "patches": [],
+        "insights": {
+          "triageAdvice": null
+        },
+        "language": "js",
+        "severity": "low",
+        "cvssScore": 2.1,
+        "functions": [],
+        "malicious": false,
+        "isDisputed": false,
+        "moduleName": "vite",
+        "references": [
+          {
+            "url": "https://github.com/vitejs/vite/security/advisories/GHSA-9jrq-w75r-8gcw",
+            "title": "GitHub Advisory"
+          },
+          {
+            "url": "https://github.com/vitejs/vite/commit/7dafd8e56f152403a3230608fa4005273c2e9e17",
+            "title": "GitHub Commit"
+          },
+          {
+            "url": "https://github.com/vitejs/vite/pull/23653",
+            "title": "GitHub PR"
+          }
+        ],
+        "cvssDetails": [
+          {
+            "assigner": "Red Hat",
+            "severity": "medium",
+            "cvssV3Vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:L/I:L/A:N",
+            "cvssV3BaseScore": 6.1,
+            "modificationTime": "2026-10-21T07:29:15.754359Z"
+          }
+        ],
+        "cvssSources": [
+          {
+            "type": "primary",
+            "vector": "CVSS:4.0/AV:N/AC:L/AT:P/PR:N/UI:A/VC:L/VI:L/VA:N/SC:N/SI:N/SA:N/E:P",
+            "assigner": "Snyk",
+            "severity": "low",
+            "baseScore": 2.1,
+            "cvssVersion": "4.0",
+            "modificationTime": "2026-10-29T14:03:40.895221Z"
+          },
+          {
+            "type": "secondary",
+            "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:R/S:U/C:L/I:L/A:N/E:P",
+            "assigner": "Snyk",
+            "severity": "medium",
+            "baseScore": 4.2,
+            "cvssVersion": "3.1",
+            "modificationTime": "2026-10-29T14:03:40.895221Z"
+          },
+          {
+            "type": "secondary",
+            "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:L/I:L/A:N",
+            "assigner": "Red Hat",
+            "severity": "medium",
+            "baseScore": 6.1,
+            "cvssVersion": "3.1",
+            "modificationTime": "2026-10-21T07:29:15.754359Z"
+          }
+        ],
+        "description": "## Overview\n[vite](https://www.npmjs.org/package/vite) is a Native-ESM powered web dev build tool\n\nAffected versions of this package are vulnerable to Cross-site Scripting (XSS) via the `getHtmlFilename` function in `packages/vite/src/node/server/middlewares/indexHtml.ts`, where query strings are not stripped from the URL before the filename is constructed and passed to `transformIndexHtml`. An attacker who can influence the URL of an HTML request can supply a URL containing query parameters or a protocol-relative path (starting with `//`), causing the filename passed to transform hooks to be incorrect and potentially allowing unintended resource resolution or URL manipulation in generated script and link tags.\n## Details\n\nCross-site scripting (or XSS) is a code vulnerability that occurs when an attacker “injects” a malicious script into an otherwise trusted website. The injected script gets downloaded and executed by the end user’s browser when the user interacts with the compromised website.\n\nThis is done by escaping the context of the web application; the web application then delivers that data to its users along with other trusted dynamic content, without validating it. The browser unknowingly executes malicious script on the client side (through client-side languages; usually JavaScript or HTML)  in order to perform actions that are otherwise typically blocked by the browser’s Same Origin Policy.\n\nInjecting malicious code is the most prevalent manner by which XSS is exploited; for this reason, escaping characters in order to prevent this manipulation is the top method for securing code against this vulnerability.\n\nEscaping means that the application is coded to mark key characters, and particularly key characters included in user input, to prevent those characters from being interpreted in a dangerous context. For example, in HTML, `<` can be coded as  `&lt`; and `>` can be coded as `&gt`; in order to be interpreted and displayed as themselves in text, while within the code itself, they are used for HTML tags. If malicious content is injected into an application that escapes special characters and that malicious content uses `<` and `>` as HTML tags, those characters are nonetheless not interpreted as HTML tags by the browser if they’ve been correctly escaped in the application code and in this way the attempted attack is diverted.\n \nThe most prominent use of XSS is to steal cookies (source: OWASP HttpOnly) and hijack user sessions, but XSS exploits have been used to expose sensitive information, enable access to privileged services and functionality and deliver malware. \n\n### Types of attacks\nThere are a few methods by which XSS can be manipulated:\n\n|Type|Origin|Description|\n|--|--|--|\n|**Stored**|Server|The malicious code is inserted in the application (usually as a link) by the attacker. The code is activated every time a user clicks the link.|\n|**Reflected**|Server|The attacker delivers a malicious link externally from the vulnerable web site application to a user. When clicked, malicious code is sent to the vulnerable web site, which reflects the attack back to the user’s browser.| \n|**DOM-based**|Client|The attacker forces the user’s browser to render a malicious page. The data in the page itself delivers the cross-site scripting data.|\n|**Mutated**| |The attacker injects code that appears safe, but is then rewritten and modified by the browser, while parsing the markup. An example is rebalancing unclosed quotation marks or even adding quotation marks to unquoted parameters.|\n\n### Affected environments\nThe following environments are susceptible to an XSS attack:\n\n* Web servers\n* Application servers\n* Web application environments\n\n### How to prevent\nThis section describes the top best practices designed to specifically protect your code: \n\n* Sanitize data input in an HTTP request before reflecting it back, ensuring all data is validated, filtered or escaped before echoing anything back to the user, such as the values of query parameters during searches. \n* Convert special characters such as `?`, `&`, `/`, `<`, `>` and spaces to their respective HTML or URL encoded equivalents. \n* Give users the option to disable client-side scripts.\n* Redirect invalid requests.\n* Detect simultaneous logins, including those from two separate IP addresses, and invalidate those sessions.\n* Use and enforce a Content Security Policy (source: Wikipedia) to disable any features that might be manipulated for an XSS attack.\n* Read the documentation for any of the libraries referenced in your code to understand which elements allow for embedded HTML.\n\n## Remediation\nUpgrade `vite` to version 8.3.3, 8.2.4, 8.1.6, 7.3.7, 6.4.4 or higher.\n## References\n- [GitHub Advisory](https://github.com/vitejs/vite/security/advisories/GHSA-9jrq-w75r-8gcw)\n- [GitHub Commit](https://github.com/vitejs/vite/commit/7dafd8e56f152403a3230608fa4005273c2e9e17)\n- [GitHub PR](https://github.com/vitejs/vite/pull/23653)\n",
+        "epssDetails": {
+          "percentile": "0.51972",
+          "probability": "0.00672",
+          "modelVersion": "v2026.06.15"
+        },
+        "identifiers": {
+          "CVE": [
+            "CVE-2026-112945"
+          ],
+          "CWE": [
+            "CWE-80"
+          ],
+          "GHSA": [
+            "GHSA-9jrq-w75r-8gcw"
+          ]
+        },
+        "packageName": "vite",
+        "proprietary": false,
+        "creationTime": "2026-10-21T06:39:24.465184Z",
+        "functions_new": [],
+        "alternativeIds": [],
+        "disclosureTime": "2026-10-20T16:57:54Z",
+        "exploitDetails": {
+          "sources": [
+            "Snyk"
+          ],
+          "maturityLevels": [
+            {
+              "type": "secondary",
+              "level": "Proof of Concept",
+              "format": "CVSSv3"
+            },
+            {
+              "type": "primary",
+              "level": "Proof of Concept",
+              "format": "CVSSv4"
+            }
+          ]
+        },
+        "packageManager": "npm",
+        "publicationTime": "2026-10-21T06:39:24.633470Z",
+        "severityBasedOn": "CVSS",
+        "modificationTime": "2026-10-29T14:03:40.895221Z",
+        "socialTrendAlert": false,
+        "severityWithCritical": "low",
+        "from": [
+          "package.json@*",
+          "vite@8.2.2"
+        ],
+        "upgradePath": [
+          false,
+          "vite@8.2.4"
+        ],
+        "isUpgradable": true,
+        "isPatchable": false,
+        "name": "vite",
+        "version": "8.2.2"
+      }
+    ],
+    "ok": false,
+    "dependencyCount": 215,
+    "org": "josejulianamadogarcia10-lab",
+    "policy": "# Snyk (https://snyk.io) policy file, patches or ignores known vulnerabilities.\nversion: v1.25.1\nignore: {}\npatch: {}\n",
+    "isPrivate": true,
+    "licensesPolicy": {
+      "severities": {},
+      "orgLicenseRules": {
+        "AGPL-1.0": {
+          "licenseType": "AGPL-1.0",
+          "severity": "high",
+          "instructions": ""
+        },
+        "AGPL-3.0": {
+          "licenseType": "AGPL-3.0",
+          "severity": "high",
+          "instructions": ""
+        },
+        "Artistic-1.0": {
+          "licenseType": "Artistic-1.0",
+          "severity": "medium",
+          "instructions": ""
+        },
+        "Artistic-2.0": {
+          "licenseType": "Artistic-2.0",
+          "severity": "medium",
+          "instructions": ""
+        },
+        "CDDL-1.0": {
+          "licenseType": "CDDL-1.0",
+          "severity": "medium",
+          "instructions": ""
+        },
+        "CPOL-1.02": {
+          "licenseType": "CPOL-1.02",
+          "severity": "high",
+          "instructions": ""
+        },
+        "EPL-1.0": {
+          "licenseType": "EPL-1.0",
+          "severity": "medium",
+          "instructions": ""
+        },
+        "GPL-2.0": {
+          "licenseType": "GPL-2.0",
+          "severity": "high",
+          "instructions": ""
+        },
+        "GPL-3.0": {
+          "licenseType": "GPL-3.0",
+          "severity": "high",
+          "instructions": ""
+        },
+        "LGPL-2.0": {
+          "licenseType": "LGPL-2.0",
+          "severity": "medium",
+          "instructions": ""
+        },
+        "LGPL-2.1": {
+          "licenseType": "LGPL-2.1",
+          "severity": "medium",
+          "instructions": ""
+        },
+        "LGPL-3.0": {
+          "licenseType": "LGPL-3.0",
+          "severity": "medium",
+          "instructions": ""
+        },
+        "MPL-1.1": {
+          "licenseType": "MPL-1.1",
+          "severity": "medium",
+          "instructions": ""
+        },
+        "MPL-2.0": {
+          "licenseType": "MPL-2.0",
+          "severity": "medium",
+          "instructions": ""
+        },
+        "MS-RL": {
+          "licenseType": "MS-RL",
+          "severity": "medium",
+          "instructions": ""
+        },
+        "SimPL-2.0": {
+          "licenseType": "SimPL-2.0",
+          "severity": "high",
+          "instructions": ""
+        }
+      }
+    },
+    "packageManager": "npm",
+    "ignoreSettings": {
+      "adminOnly": false,
+      "reasonRequired": false,
+      "disregardFilesystemIgnores": false,
+      "autoApproveIgnores": false,
+      "approvalWorkflowEnabled": false
+    },
+    "summary": "7 vulnerable dependency paths",
+    "remediation": {
+      "unresolved": [],
+      "upgrade": {
+        "concurrently@10.0.5": {
+          "upgradeTo": "concurrently@10.0.6",
+          "upgrades": [
+            "shell-quote@1.9.0"
+          ],
+          "vulns": [
+            "SNYK-JS-SHELLQUOTE-20250993"
+          ]
+        },
+        "vite@8.2.2": {
+          "upgradeTo": "vite@8.2.4",
+          "upgrades": [
+            "vite@8.2.2",
+            "vite@8.2.2",
+            "vite@8.2.2",
+            "vite@8.2.2",
+            "vite@8.2.2",
+            "vite@8.2.2"
+          ],
+          "vulns": [
+            "SNYK-JS-VITE-21282012",
+            "SNYK-JS-VITE-21282024",
+            "SNYK-JS-VITE-21282030",
+            "SNYK-JS-VITE-21282039",
+            "SNYK-JS-VITE-21282045",
+            "SNYK-JS-VITE-21282049"
+          ]
+        }
+      },
+      "patch": {},
+      "ignore": {},
+      "pin": {}
+    },
+    "filesystemPolicy": false,
+    "filtered": {
+      "ignore": [],
+      "patch": []
+    },
+    "uniqueCount": 7,
+    "projectName": "package.json",
+    "foundProjectCount": 5,
+    "displayTargetFile": "package-lock.json",
+    "hasUnknownVersions": false,
+    "path": "C:\\Users\\josej\\Desktop\\Universidad_Docs\\PROYECTO DE GRADUACIÓN\\github-forja"
+  },
+  {
+    "vulnerabilities": [],
+    "ok": true,
+    "dependencyCount": 51,
+    "org": "josejulianamadogarcia10-lab",
+    "policy": "# Snyk (https://snyk.io) policy file, patches or ignores known vulnerabilities.\nversion: v1.25.1\nignore: {}\npatch: {}\n",
+    "isPrivate": true,
+    "licensesPolicy": {
+      "severities": {},
+      "orgLicenseRules": {
+        "AGPL-1.0": {
+          "licenseType": "AGPL-1.0",
+          "severity": "high",
+          "instructions": ""
+        },
+        "AGPL-3.0": {
+          "licenseType": "AGPL-3.0",
+          "severity": "high",
+          "instructions": ""
+        },
+        "Artistic-1.0": {
+          "licenseType": "Artistic-1.0",
+          "severity": "medium",
+          "instructions": ""
+        },
+        "Artistic-2.0": {
+          "licenseType": "Artistic-2.0",
+          "severity": "medium",
+          "instructions": ""
+        },
+        "CDDL-1.0": {
+          "licenseType": "CDDL-1.0",
+          "severity": "medium",
+          "instructions": ""
+        },
+        "CPOL-1.02": {
+          "licenseType": "CPOL-1.02",
+          "severity": "high",
+          "instructions": ""
+        },
+        "EPL-1.0": {
+          "licenseType": "EPL-1.0",
+          "severity": "medium",
+          "instructions": ""
+        },
+        "GPL-2.0": {
+          "licenseType": "GPL-2.0",
+          "severity": "high",
+          "instructions": ""
+        },
+        "GPL-3.0": {
+          "licenseType": "GPL-3.0",
+          "severity": "high",
+          "instructions": ""
+        },
+        "LGPL-2.0": {
+          "licenseType": "LGPL-2.0",
+          "severity": "medium",
+          "instructions": ""
+        },
+        "LGPL-2.1": {
+          "licenseType": "LGPL-2.1",
+          "severity": "medium",
+          "instructions": ""
+        },
+        "LGPL-3.0": {
+          "licenseType": "LGPL-3.0",
+          "severity": "medium",
+          "instructions": ""
+        },
+        "MPL-1.1": {
+          "licenseType": "MPL-1.1",
+          "severity": "medium",
+          "instructions": ""
+        },
+        "MPL-2.0": {
+          "licenseType": "MPL-2.0",
+          "severity": "medium",
+          "instructions": ""
+        },
+        "MS-RL": {
+          "licenseType": "MS-RL",
+          "severity": "medium",
+          "instructions": ""
+        },
+        "SimPL-2.0": {
+          "licenseType": "SimPL-2.0",
+          "severity": "high",
+          "instructions": ""
+        }
+      }
+    },
+    "packageManager": "npm",
+    "ignoreSettings": {
+      "adminOnly": false,
+      "reasonRequired": false,
+      "disregardFilesystemIgnores": false,
+      "autoApproveIgnores": false,
+      "approvalWorkflowEnabled": false
+    },
+    "summary": "No known vulnerabilities",
+    "filesystemPolicy": false,
+    "uniqueCount": 0,
+    "projectName": "package.json",
+    "foundProjectCount": 5,
+    "displayTargetFile": "vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\resources\\exceptions\\renderer\\package-lock.json",
+    "hasUnknownVersions": false,
+    "path": "C:\\Users\\josej\\Desktop\\Universidad_Docs\\PROYECTO DE GRADUACIÓN\\github-forja"
+  },
+  {
+    "vulnerabilities": [],
+    "ok": true,
+    "dependencyCount": 0,
+    "org": "josejulianamadogarcia10-lab",
+    "policy": "# Snyk (https://snyk.io) policy file, patches or ignores known vulnerabilities.\nversion: v1.25.1\nignore: {}\npatch: {}\n",
+    "isPrivate": true,
+    "licensesPolicy": {
+      "severities": {},
+      "orgLicenseRules": {
+        "AGPL-1.0": {
+          "licenseType": "AGPL-1.0",
+          "severity": "high",
+          "instructions": ""
+        },
+        "AGPL-3.0": {
+          "licenseType": "AGPL-3.0",
+          "severity": "high",
+          "instructions": ""
+        },
+        "Artistic-1.0": {
+          "licenseType": "Artistic-1.0",
+          "severity": "medium",
+          "instructions": ""
+        },
+        "Artistic-2.0": {
+          "licenseType": "Artistic-2.0",
+          "severity": "medium",
+          "instructions": ""
+        },
+        "CDDL-1.0": {
+          "licenseType": "CDDL-1.0",
+          "severity": "medium",
+          "instructions": ""
+        },
+        "CPOL-1.02": {
+          "licenseType": "CPOL-1.02",
+          "severity": "high",
+          "instructions": ""
+        },
+        "EPL-1.0": {
+          "licenseType": "EPL-1.0",
+          "severity": "medium",
+          "instructions": ""
+        },
+        "GPL-2.0": {
+          "licenseType": "GPL-2.0",
+          "severity": "high",
+          "instructions": ""
+        },
+        "GPL-3.0": {
+          "licenseType": "GPL-3.0",
+          "severity": "high",
+          "instructions": ""
+        },
+        "LGPL-2.0": {
+          "licenseType": "LGPL-2.0",
+          "severity": "medium",
+          "instructions": ""
+        },
+        "LGPL-2.1": {
+          "licenseType": "LGPL-2.1",
+          "severity": "medium",
+          "instructions": ""
+        },
+        "LGPL-3.0": {
+          "licenseType": "LGPL-3.0",
+          "severity": "medium",
+          "instructions": ""
+        },
+        "MPL-1.1": {
+          "licenseType": "MPL-1.1",
+          "severity": "medium",
+          "instructions": ""
+        },
+        "MPL-2.0": {
+          "licenseType": "MPL-2.0",
+          "severity": "medium",
+          "instructions": ""
+        },
+        "MS-RL": {
+          "licenseType": "MS-RL",
+          "severity": "medium",
+          "instructions": ""
+        },
+        "SimPL-2.0": {
+          "licenseType": "SimPL-2.0",
+          "severity": "high",
+          "instructions": ""
+        }
+      }
+    },
+    "packageManager": "npm",
+    "ignoreSettings": {
+      "adminOnly": false,
+      "reasonRequired": false,
+      "disregardFilesystemIgnores": false,
+      "autoApproveIgnores": false,
+      "approvalWorkflowEnabled": false
+    },
+    "summary": "No known vulnerabilities",
+    "filesystemPolicy": false,
+    "uniqueCount": 0,
+    "projectName": "package.json",
+    "foundProjectCount": 5,
+    "displayTargetFile": "vendor\\laravel\\wayfinder\\package.json",
+    "hasUnknownVersions": false,
+    "path": "C:\\Users\\josej\\Desktop\\Universidad_Docs\\PROYECTO DE GRADUACIÓN\\github-forja"
+  },
+  {
+    "vulnerabilities": [],
+    "ok": true,
+    "dependencyCount": 6,
+    "org": "josejulianamadogarcia10-lab",
+    "policy": "# Snyk (https://snyk.io) policy file, patches or ignores known vulnerabilities.\nversion: v1.25.1\nignore: {}\npatch: {}\n",
+    "isPrivate": true,
+    "licensesPolicy": {
+      "severities": {},
+      "orgLicenseRules": {
+        "AGPL-1.0": {
+          "licenseType": "AGPL-1.0",
+          "severity": "high",
+          "instructions": ""
+        },
+        "AGPL-3.0": {
+          "licenseType": "AGPL-3.0",
+          "severity": "high",
+          "instructions": ""
+        },
+        "Artistic-1.0": {
+          "licenseType": "Artistic-1.0",
+          "severity": "medium",
+          "instructions": ""
+        },
+        "Artistic-2.0": {
+          "licenseType": "Artistic-2.0",
+          "severity": "medium",
+          "instructions": ""
+        },
+        "CDDL-1.0": {
+          "licenseType": "CDDL-1.0",
+          "severity": "medium",
+          "instructions": ""
+        },
+        "CPOL-1.02": {
+          "licenseType": "CPOL-1.02",
+          "severity": "high",
+          "instructions": ""
+        },
+        "EPL-1.0": {
+          "licenseType": "EPL-1.0",
+          "severity": "medium",
+          "instructions": ""
+        },
+        "GPL-2.0": {
+          "licenseType": "GPL-2.0",
+          "severity": "high",
+          "instructions": ""
+        },
+        "GPL-3.0": {
+          "licenseType": "GPL-3.0",
+          "severity": "high",
+          "instructions": ""
+        },
+        "LGPL-2.0": {
+          "licenseType": "LGPL-2.0",
+          "severity": "medium",
+          "instructions": ""
+        },
+        "LGPL-2.1": {
+          "licenseType": "LGPL-2.1",
+          "severity": "medium",
+          "instructions": ""
+        },
+        "LGPL-3.0": {
+          "licenseType": "LGPL-3.0",
+          "severity": "medium",
+          "instructions": ""
+        },
+        "MPL-1.1": {
+          "licenseType": "MPL-1.1",
+          "severity": "medium",
+          "instructions": ""
+        },
+        "MPL-2.0": {
+          "licenseType": "MPL-2.0",
+          "severity": "medium",
+          "instructions": ""
+        },
+        "MS-RL": {
+          "licenseType": "MS-RL",
+          "severity": "medium",
+          "instructions": ""
+        },
+        "SimPL-2.0": {
+          "licenseType": "SimPL-2.0",
+          "severity": "high",
+          "instructions": ""
+        }
+      }
+    },
+    "packageManager": "composer",
+    "ignoreSettings": {
+      "adminOnly": false,
+      "reasonRequired": false,
+      "disregardFilesystemIgnores": false,
+      "autoApproveIgnores": false,
+      "approvalWorkflowEnabled": false
+    },
+    "summary": "No known vulnerabilities",
+    "filesystemPolicy": false,
+    "uniqueCount": 0,
+    "targetFile": "vendor\\phar-io\\manifest\\composer.lock",
+    "projectName": "phar-io/manifest",
+    "foundProjectCount": 5,
+    "displayTargetFile": "vendor\\phar-io\\manifest\\composer.lock",
+    "hasUnknownVersions": false,
+    "path": "C:\\Users\\josej\\Desktop\\Universidad_Docs\\PROYECTO DE GRADUACIÓN\\github-forja/manifest"
+  },
+  {
+    "vulnerabilities": [],
+    "ok": true,
+    "dependencyCount": 38,
+    "org": "josejulianamadogarcia10-lab",
+    "policy": "# Snyk (https://snyk.io) policy file, patches or ignores known vulnerabilities.\nversion: v1.25.1\nignore: {}\npatch: {}\n",
+    "isPrivate": true,
+    "licensesPolicy": {
+      "severities": {},
+      "orgLicenseRules": {
+        "AGPL-1.0": {
+          "licenseType": "AGPL-1.0",
+          "severity": "high",
+          "instructions": ""
+        },
+        "AGPL-3.0": {
+          "licenseType": "AGPL-3.0",
+          "severity": "high",
+          "instructions": ""
+        },
+        "Artistic-1.0": {
+          "licenseType": "Artistic-1.0",
+          "severity": "medium",
+          "instructions": ""
+        },
+        "Artistic-2.0": {
+          "licenseType": "Artistic-2.0",
+          "severity": "medium",
+          "instructions": ""
+        },
+        "CDDL-1.0": {
+          "licenseType": "CDDL-1.0",
+          "severity": "medium",
+          "instructions": ""
+        },
+        "CPOL-1.02": {
+          "licenseType": "CPOL-1.02",
+          "severity": "high",
+          "instructions": ""
+        },
+        "EPL-1.0": {
+          "licenseType": "EPL-1.0",
+          "severity": "medium",
+          "instructions": ""
+        },
+        "GPL-2.0": {
+          "licenseType": "GPL-2.0",
+          "severity": "high",
+          "instructions": ""
+        },
+        "GPL-3.0": {
+          "licenseType": "GPL-3.0",
+          "severity": "high",
+          "instructions": ""
+        },
+        "LGPL-2.0": {
+          "licenseType": "LGPL-2.0",
+          "severity": "medium",
+          "instructions": ""
+        },
+        "LGPL-2.1": {
+          "licenseType": "LGPL-2.1",
+          "severity": "medium",
+          "instructions": ""
+        },
+        "LGPL-3.0": {
+          "licenseType": "LGPL-3.0",
+          "severity": "medium",
+          "instructions": ""
+        },
+        "MPL-1.1": {
+          "licenseType": "MPL-1.1",
+          "severity": "medium",
+          "instructions": ""
+        },
+        "MPL-2.0": {
+          "licenseType": "MPL-2.0",
+          "severity": "medium",
+          "instructions": ""
+        },
+        "MS-RL": {
+          "licenseType": "MS-RL",
+          "severity": "medium",
+          "instructions": ""
+        },
+        "SimPL-2.0": {
+          "licenseType": "SimPL-2.0",
+          "severity": "high",
+          "instructions": ""
+        }
+      }
+    },
+    "packageManager": "composer",
+    "ignoreSettings": {
+      "adminOnly": false,
+      "reasonRequired": false,
+      "disregardFilesystemIgnores": false,
+      "autoApproveIgnores": false,
+      "approvalWorkflowEnabled": false
+    },
+    "summary": "No known vulnerabilities",
+    "filesystemPolicy": false,
+    "uniqueCount": 0,
+    "targetFile": "vendor\\phpunit\\phpunit\\composer.lock",
+    "projectName": "phpunit/phpunit",
+    "foundProjectCount": 5,
+    "displayTargetFile": "vendor\\phpunit\\phpunit\\composer.lock",
+    "hasUnknownVersions": false,
+    "path": "C:\\Users\\josej\\Desktop\\Universidad_Docs\\PROYECTO DE GRADUACIÓN\\github-forja/phpunit"
+  },
+  {
+    "vulnerabilities": [],
+    "ok": true,
+    "dependencyCount": 4,
+    "org": "josejulianamadogarcia10-lab",
+    "policy": "# Snyk (https://snyk.io) policy file, patches or ignores known vulnerabilities.\nversion: v1.25.1\nignore: {}\npatch: {}\n",
+    "isPrivate": true,
+    "licensesPolicy": {
+      "severities": {},
+      "orgLicenseRules": {
+        "AGPL-1.0": {
+          "licenseType": "AGPL-1.0",
+          "severity": "high",
+          "instructions": ""
+        },
+        "AGPL-3.0": {
+          "licenseType": "AGPL-3.0",
+          "severity": "high",
+          "instructions": ""
+        },
+        "Artistic-1.0": {
+          "licenseType": "Artistic-1.0",
+          "severity": "medium",
+          "instructions": ""
+        },
+        "Artistic-2.0": {
+          "licenseType": "Artistic-2.0",
+          "severity": "medium",
+          "instructions": ""
+        },
+        "CDDL-1.0": {
+          "licenseType": "CDDL-1.0",
+          "severity": "medium",
+          "instructions": ""
+        },
+        "CPOL-1.02": {
+          "licenseType": "CPOL-1.02",
+          "severity": "high",
+          "instructions": ""
+        },
+        "EPL-1.0": {
+          "licenseType": "EPL-1.0",
+          "severity": "medium",
+          "instructions": ""
+        },
+        "GPL-2.0": {
+          "licenseType": "GPL-2.0",
+          "severity": "high",
+          "instructions": ""
+        },
+        "GPL-3.0": {
+          "licenseType": "GPL-3.0",
+          "severity": "high",
+          "instructions": ""
+        },
+        "LGPL-2.0": {
+          "licenseType": "LGPL-2.0",
+          "severity": "medium",
+          "instructions": ""
+        },
+        "LGPL-2.1": {
+          "licenseType": "LGPL-2.1",
+          "severity": "medium",
+          "instructions": ""
+        },
+        "LGPL-3.0": {
+          "licenseType": "LGPL-3.0",
+          "severity": "medium",
+          "instructions": ""
+        },
+        "MPL-1.1": {
+          "licenseType": "MPL-1.1",
+          "severity": "medium",
+          "instructions": ""
+        },
+        "MPL-2.0": {
+          "licenseType": "MPL-2.0",
+          "severity": "medium",
+          "instructions": ""
+        },
+        "MS-RL": {
+          "licenseType": "MS-RL",
+          "severity": "medium",
+          "instructions": ""
+        },
+        "SimPL-2.0": {
+          "licenseType": "SimPL-2.0",
+          "severity": "high",
+          "instructions": ""
+        }
+      }
+    },
+    "packageManager": "composer",
+    "ignoreSettings": {
+      "adminOnly": false,
+      "reasonRequired": false,
+      "disregardFilesystemIgnores": false,
+      "autoApproveIgnores": false,
+      "approvalWorkflowEnabled": false
+    },
+    "summary": "No known vulnerabilities",
+    "filesystemPolicy": false,
+    "uniqueCount": 0,
+    "targetFile": "vendor\\theseer\\tokenizer\\composer.lock",
+    "projectName": "theseer/tokenizer",
+    "foundProjectCount": 5,
+    "displayTargetFile": "vendor\\theseer\\tokenizer\\composer.lock",
+    "hasUnknownVersions": false,
+    "path": "C:\\Users\\josej\\Desktop\\Universidad_Docs\\PROYECTO DE GRADUACIÓN\\github-forja/tokenizer"
+  }
+]
